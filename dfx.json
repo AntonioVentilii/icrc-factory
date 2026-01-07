@@ -1,0 +1,48 @@
+{
+	"canisters": {
+		"oisy-points-backend": {
+			"candid": "src/oisy-points-backend/oisy-points-backend.did",
+			"declarations": {
+				"node_compatibility": true
+			},
+			"package": "oisy-points-backend",
+			"type": "rust",
+			"specified_id": "ai7ae-6yaaa-aaaae-acsaa-cai"
+		},
+		"oisy_points_ledger": {
+			"type": "custom",
+			"candid": "https://github.com/dfinity/ic/releases/download/ledger-suite-icrc-2025-06-19/ledger.did",
+			"wasm": "https://github.com/dfinity/ic/releases/download/ledger-suite-icrc-2025-06-19/ic-icrc1-ledger.wasm.gz",
+			"init_arg_file": "out/build.ledger.args.did",
+			"pre_install": "scripts/build.ledger.args.sh",
+			"specified_id": "ap6gq-taaaa-aaaae-acsaq-cai"
+		},
+		"oisy_points_index": {
+			"dependencies": ["oisy_points_ledger"],
+			"type": "custom",
+			"candid": "https://github.com/dfinity/ic/releases/download/ledger-suite-icrc-2025-06-19/index-ng.did",
+			"wasm": "https://github.com/dfinity/ic/releases/download/ledger-suite-icrc-2025-06-19/ic-icrc1-index-ng.wasm.gz",
+			"init_arg_file": "out/build.index.args.did",
+			"pre_install": "scripts/build.index.args.sh",
+			"specified_id": "x3qir-tyaaa-aaaae-acr6a-cai"
+		}
+	},
+	"defaults": {
+		"build": {
+			"args": "",
+			"packtool": ""
+		}
+	},
+	"output_env_file": ".env",
+	"version": 1,
+	"networks": {
+		"staging": {
+			"providers": ["https://icp0.io"],
+			"type": "persistent"
+		},
+		"local": {
+			"bind": "127.0.0.1:4943",
+			"type": "ephemeral"
+		}
+	}
+}

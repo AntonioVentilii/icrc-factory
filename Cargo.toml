@@ -1,0 +1,17 @@
+[workspace]
+members = [
+    "src/icrc-factory"
+]
+resolver = "2"
+
+[workspace.dependencies]
+ic-cdk = "0.17.2"
+candid = "0.10"
+
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+struct_field_names = "allow"
