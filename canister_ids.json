@@ -1,11 +1,6 @@
 {
-	"oisy-points-backend": {
-		"staging": "ai7ae-6yaaa-aaaae-acsaa-cai"
-	},
-	"oisy_points_index": {
-		"staging": "x3qir-tyaaa-aaaae-acr6a-cai"
-	},
-	"oisy_points_ledger": {
-		"staging": "ap6gq-taaaa-aaaae-acsaq-cai"
-	}
+  "icrc-factory": {
+    "ic": "vcucg-liaaa-aaaam-qfb4a-cai",
+    "staging": "bk77y-uiaaa-aaaac-qdhba-cai"
+  }
 }
