@@ -1,12 +1,12 @@
-use candid::{CandidType, Principal};
-use ic_cdk::api::management_canister::http_request::{
-    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformContext, TransformArgs,
-};
-use serde::{Deserialize, Serialize};
 use std::cell::RefCell;
 
+use ic_cdk::api::management_canister::http_request::{
+    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs,
+    TransformContext,
+};
+
 thread_local! {
-    static WASM_STORAGE: RefCell<Vec<u8>> = RefCell::new(Vec::new());
+    static WASM_STORAGE: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };
 }
 
 pub fn get_stored_wasm() -> Vec<u8> {
@@ -19,14 +19,11 @@ pub fn set_wasm(wasm: Vec<u8>) {
     });
 }
 
-#[ic_cdk::update]
 pub async fn fetch_wasm_from_url(url: String) -> Result<usize, String> {
-    let request_headers = vec![
-        HttpHeader {
-            name: "User-Agent".to_string(),
-            value: "IC-Canister".to_string(),
-        },
-    ];
+    let request_headers = vec![HttpHeader {
+        name: "User-Agent".to_string(),
+        value: "IC-Canister".to_string(),
+    }];
 
     let request = CanisterHttpRequestArgument {
         url: url.clone(),
@@ -34,7 +31,10 @@ pub async fn fetch_wasm_from_url(url: String) -> Result<usize, String> {
         method: HttpMethod::GET,
         headers: request_headers,
         body: None,
-        transform: Some(TransformContext::from_name("transform_wasm_response".to_string(), vec![])),
+        transform: Some(TransformContext::from_name(
+            "transform_wasm_response".to_string(),
+            vec![],
+        )),
     };
 
     // Note: Outcalls require cycles. The amount depends on the size and number of nodes.
@@ -51,10 +51,9 @@ pub async fn fetch_wasm_from_url(url: String) -> Result<usize, String> {
     Ok(response.body.len())
 }
 
-#[ic_cdk::query]
 pub fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
     let mut res = args.response;
-    // We don't remove headers or change the body for WASM typically, 
+    // We don't remove headers or change the body for WASM typically,
     // but some cleansing might be needed if nodes return slightly different headers.
     res.headers = vec![];
     res
