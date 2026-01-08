@@ -1,0 +1,15 @@
+type HttpHeader = record { value : text; name : text };
+type HttpResponse = record {
+  status : nat;
+  body : blob;
+  headers : vec HttpHeader;
+};
+type Result = variant { Ok : principal; Err : text };
+type Result_1 = variant { Ok : nat64; Err : text };
+type TransformArgs = record { context : blob; response : HttpResponse };
+service : {
+  create_icrc_ledger : (nat) -> (Result);
+  fetch_wasm : (text) -> (Result_1);
+  transform_wasm_response : (TransformArgs) -> (HttpResponse) query;
+  upload_wasm : (blob) -> ();
+}
