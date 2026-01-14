@@ -8,12 +8,12 @@ type CreateCanisterResult = variant {
 	Ok : principal;
 	Err : CreateCanisterError
 };
-type Result = variant { Ok : nat64; Err : text };
+type SetWasmResult = variant { Ok : nat64; Err : text };
 service : {
 	create_icrc_index : (principal) -> (CreateCanisterResult);
 	create_icrc_ledger : () -> (CreateCanisterResult);
 	set_index_wasm : (blob) -> ();
-	set_index_wasm_from_url : (text) -> (Result);
+	set_index_wasm_from_url : (text) -> (SetWasmResult);
 	set_ledger_wasm : (blob) -> ();
-	set_ledger_wasm_from_url : (text) -> (Result)
+	set_ledger_wasm_from_url : (text) -> (SetWasmResult)
 }
