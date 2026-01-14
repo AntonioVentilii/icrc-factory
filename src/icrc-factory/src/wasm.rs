@@ -44,7 +44,10 @@ pub async fn set_wasm_from_url(url: String) -> Result<usize, String> {
         .map_err(|(code, msg)| format!("HTTP request failed: {:?} - {}", code, msg))?;
 
     if response.status != 200u64 {
-        return Err(format!("HTTP error: status {} - message {:?}", response.status, response.body));
+        return Err(format!(
+            "HTTP error: status {} - message {:?}",
+            response.status, response.body
+        ));
     }
 
     set_wasm(response.body.clone());

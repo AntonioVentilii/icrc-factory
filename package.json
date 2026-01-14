@@ -7,7 +7,7 @@
 		"deploy:staging": "dfx deploy --network staging --upgrade-unchanged",
 		"reinstall:ledger:staging": "DFX_NETWORK=staging ./scripts/build.ledger.args.sh init && dfx canister install oisy_points_ledger --mode reinstall --network staging --argument-file ./out/build.ledger.args.did --upgrade-unchanged",
 		"reinstall:index:staging": "DFX_NETWORK=staging ./scripts/build.index.args.sh init && dfx canister install oisy_points_index --mode reinstall --network staging --argument-file ./out/build.index.args.did --upgrade-unchanged",
-		"wasm:prod": "dfx canister call icrc-factory --ic set_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/f89cf257a4e88a5e2f6f29ab50ad4a49b0cb514d/canisters/ic-icrc1-ledger.wasm.gz\\\")\"",
+		"wasm:prod": "dfx canister call icrc-factory --ic set_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/f89cf257a4e88a5e2f6f29ab50ad4a49b0cb514d/canisters/ic-icrc1-ledger.wasm.gz\\\")\""
 	},
 	"devDependencies": {
 		"prettier": "^3.6.2",

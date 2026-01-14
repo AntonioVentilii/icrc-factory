@@ -19,7 +19,9 @@ use crate::{
 };
 
 #[update]
-async fn create_icrc_ledger(cycles: u128) -> Result<Principal, String> {
+async fn create_icrc_ledger() -> Result<Principal, String> {
+    let cycles = 500_000_000_000u128;
+
     let caller = caller();
 
     let ledger_wasm = get_stored_wasm();
