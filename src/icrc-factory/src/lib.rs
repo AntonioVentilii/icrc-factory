@@ -20,7 +20,7 @@ use crate::{
 
 #[update]
 async fn create_icrc_ledger() -> Result<Principal, String> {
-    let cycles = 500_000_000_000u128;
+    let cycles = 1_000_000_000_000u128;
 
     let caller = caller();
 

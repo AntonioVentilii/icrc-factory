@@ -8,7 +8,7 @@ type Result = variant { Ok : principal; Err : text };
 type Result_1 = variant { Ok : nat64; Err : text };
 type TransformArgs = record { context : blob; response : HttpResponse };
 service : {
-	create_icrc_ledger : (nat) -> (Result);
+	create_icrc_ledger : () -> (Result);
 	set_wasm : (blob) -> ();
 	set_wasm_from_url : (text) -> (Result_1);
 	transform_wasm_response : (TransformArgs) -> (HttpResponse) query
