@@ -4,8 +4,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::types::ledger_suite::{
     common::FeatureFlags,
-    init_args::{ArchiveOptions, InitArgs},
-    upgrade_args::UpgradeArgs,
+    ledger::{
+        init_args::{ArchiveOptions, InitArgs},
+        upgrade_args::UpgradeArgs,
+    },
 };
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
