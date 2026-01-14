@@ -25,7 +25,7 @@ pub fn create_default_ledger_init_args(owner: Principal) -> LedgerArgs {
         metadata: vec![],
         feature_flags: Some(FeatureFlags { icrc2: true }),
         minting_account: Account {
-            owner: owner.clone(),
+            owner,
             subaccount: None,
         },
         initial_balances: vec![],

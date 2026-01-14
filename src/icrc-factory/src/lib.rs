@@ -14,7 +14,10 @@ use crate::{
     index::create_default_index_init_args,
     ledger::create_default_ledger_init_args,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
-    types::results::create_canister::{CreateCanisterError, CreateCanisterResult},
+    types::results::{
+        create_canister::{CreateCanisterError, CreateCanisterResult},
+        set_wasm::SetWasmResult,
+    },
     wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
 
@@ -24,8 +27,10 @@ async fn set_ledger_wasm(wasm: Vec<u8>) {
 }
 
 #[update]
-async fn set_ledger_wasm_from_url(url: String) -> Result<usize, String> {
-    crate::wasm::ledger_wasm::set_ledger_wasm_from_url(url).await
+async fn set_ledger_wasm_from_url(url: String) -> SetWasmResult {
+    crate::wasm::ledger_wasm::set_ledger_wasm_from_url(url)
+        .await
+        .into()
 }
 
 #[update]
@@ -34,8 +39,10 @@ async fn set_index_wasm(wasm: Vec<u8>) {
 }
 
 #[update]
-async fn set_index_wasm_from_url(url: String) -> Result<usize, String> {
-    crate::wasm::index_wasm::set_index_wasm_from_url(url).await
+async fn set_index_wasm_from_url(url: String) -> SetWasmResult {
+    crate::wasm::index_wasm::set_index_wasm_from_url(url)
+        .await
+        .into()
 }
 
 #[update]
