@@ -1,25 +1,9 @@
-use std::cell::RefCell;
-
 use ic_cdk::api::management_canister::http_request::{
     http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs,
     TransformContext,
 };
 
-thread_local! {
-    static WASM_STORAGE: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };
-}
-
-pub fn get_stored_wasm() -> Vec<u8> {
-    WASM_STORAGE.with(|storage| storage.borrow().clone())
-}
-
-pub fn set_wasm(wasm: Vec<u8>) {
-    WASM_STORAGE.with(|storage| {
-        *storage.borrow_mut() = wasm;
-    });
-}
-
-pub async fn set_wasm_from_url(url: String) -> Result<usize, String> {
+pub async fn fetch_wasm_from_url(url: String) -> Result<HttpResponse, String> {
     let request_headers = vec![HttpHeader {
         name: "User-Agent".to_string(),
         value: "IC-Canister".to_string(),
@@ -50,14 +34,5 @@ pub async fn set_wasm_from_url(url: String) -> Result<usize, String> {
         ));
     }
 
-    set_wasm(response.body.clone());
-    Ok(response.body.len())
-}
-
-pub fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
-    let mut res = args.response;
-    // We don't remove headers or change the body for WASM typically,
-    // but some cleansing might be needed if nodes return slightly different headers.
-    res.headers = vec![];
-    res
+    Ok(response)
 }

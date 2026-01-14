@@ -15,8 +15,28 @@ use ic_cdk::{
 use crate::{
     ledger::create_default_ledger_init_args,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
-    wasm::get_stored_wasm,
+    wasm::ledger_wasm::get_stored_ledger_wasm,
 };
+
+#[update]
+async fn set_ledger_wasm(wasm: Vec<u8>) {
+    crate::wasm::ledger_wasm::set_ledger_wasm(wasm);
+}
+
+#[update]
+async fn set_ledger_wasm_from_url(url: String) -> Result<usize, String> {
+    crate::wasm::ledger_wasm::set_ledger_wasm_from_url(url).await
+}
+
+#[update]
+async fn set_index_wasm(wasm: Vec<u8>) {
+    crate::wasm::index_wasm::set_index_wasm(wasm);
+}
+
+#[update]
+async fn set_index_wasm_from_url(url: String) -> Result<usize, String> {
+    crate::wasm::index_wasm::set_index_wasm_from_url(url).await
+}
 
 #[update]
 async fn create_icrc_ledger() -> Result<Principal, String> {
@@ -24,7 +44,7 @@ async fn create_icrc_ledger() -> Result<Principal, String> {
 
     let caller = caller();
 
-    let ledger_wasm = get_stored_wasm();
+    let ledger_wasm = get_stored_ledger_wasm();
     if ledger_wasm.is_empty() {
         return Err("No WASM stored in factory. Upload or fetch it first.".to_string());
     }
@@ -47,21 +67,6 @@ async fn create_icrc_ledger() -> Result<Principal, String> {
     install_wasm(canister_id, ledger_wasm, arg).await?;
 
     Ok(canister_id)
-}
-
-#[update]
-async fn set_wasm(wasm: Vec<u8>) {
-    crate::wasm::set_wasm(wasm);
-}
-
-#[update]
-async fn set_wasm_from_url(url: String) -> Result<usize, String> {
-    crate::wasm::set_wasm_from_url(url).await
-}
-
-#[query]
-fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
-    crate::wasm::transform_wasm_response(args)
 }
 
 export_candid!();
