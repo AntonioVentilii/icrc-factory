@@ -1,5 +1,5 @@
 use ic_cdk::api::management_canister::http_request::{
-    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse,
+    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs,
     TransformContext,
 };
 
@@ -35,4 +35,12 @@ pub async fn fetch_wasm_from_url(url: String) -> Result<HttpResponse, String> {
     }
 
     Ok(response)
+}
+
+pub fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
+    let mut res = args.response;
+    // We don't remove headers or change the body for WASM typically,
+    // but some cleansing might be needed if nodes return slightly different headers.
+    res.headers = vec![];
+    res
 }
