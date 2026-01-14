@@ -19,7 +19,7 @@ pub fn set_wasm(wasm: Vec<u8>) {
     });
 }
 
-pub async fn fetch_wasm_from_url(url: String) -> Result<usize, String> {
+pub async fn fetch_and_set_wasm_from_url(url: String) -> Result<usize, String> {
     let request_headers = vec![HttpHeader {
         name: "User-Agent".to_string(),
         value: "IC-Canister".to_string(),
