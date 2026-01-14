@@ -3,11 +3,14 @@
 	"scripts": {
 		"format": "prettier --write . && ./scripts/format.sh",
 		"lint": "prettier --check . && ./scripts/lint.sh",
+		"top-up": "dfx ledger top-up vcucg-liaaa-aaaam-qfb4a-cai --ic --amount 1",
 		"deploy:prod": "dfx deploy --ic --upgrade-unchanged",
 		"deploy:staging": "dfx deploy --network staging --upgrade-unchanged",
 		"reinstall:ledger:staging": "DFX_NETWORK=staging ./scripts/build.ledger.args.sh init && dfx canister install oisy_points_ledger --mode reinstall --network staging --argument-file ./out/build.ledger.args.did --upgrade-unchanged",
 		"reinstall:index:staging": "DFX_NETWORK=staging ./scripts/build.index.args.sh init && dfx canister install oisy_points_index --mode reinstall --network staging --argument-file ./out/build.index.args.did --upgrade-unchanged",
-		"wasm:prod": "dfx canister call icrc-factory --ic set_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/6dcfafb491092704d374317d9a72a7ad2475d7c9/canisters/ic-icrc1-ledger.wasm.gz\\\")\""
+		"wasm:ledger:prod": "dfx canister call icrc-factory --ic set_ledger_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/6dcfafb491092704d374317d9a72a7ad2475d7c9/canisters/ic-icrc1-ledger.wasm.gz\\\")\"",
+		"wasm:index:prod": "dfx canister call icrc-factory --ic set_index_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/6dcfafb491092704d374317d9a72a7ad2475d7c9/canisters/ic-icrc1-index.wasm.gz\\\")\"",
+		"wasm:prod": "npm run wasm:ledger:prod && npm run wasm:index:prod"
 	},
 	"devDependencies": {
 		"prettier": "^3.6.2",
