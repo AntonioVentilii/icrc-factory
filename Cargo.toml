@@ -7,6 +7,10 @@ resolver = "2"
 [workspace.dependencies]
 ic-cdk = "0.17.2"
 candid = "0.10"
+icrc-ledger-types = "0.1.11"
+ic-cdk-timers = "0.11"
+serde = "1.0"
+serde_bytes = "0.11"
 
 [workspace.lints.rust]
 warnings = "deny"
