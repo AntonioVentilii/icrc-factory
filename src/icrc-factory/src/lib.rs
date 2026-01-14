@@ -6,8 +6,12 @@ mod wasm;
 
 use candid::Encode;
 use ic_cdk::{
-    api::management_canister::{main::CanisterSettings, provisional::CanisterId},
-    caller, export_candid, id, update,
+    api::management_canister::{
+        http_request::{HttpResponse, TransformArgs},
+        main::CanisterSettings,
+        provisional::CanisterId,
+    },
+    caller, export_candid, id, query, update,
 };
 
 use crate::{
@@ -23,6 +27,11 @@ use crate::{
     },
     wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
+
+#[query]
+fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
+    crate::wasm::utils::transform_wasm_response(args)
+}
 
 #[update]
 async fn set_ledger_wasm(wasm: Vec<u8>) {

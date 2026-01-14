@@ -1,3 +1,3 @@
 pub mod index_wasm;
 pub mod ledger_wasm;
-mod utils;
+pub mod utils;
