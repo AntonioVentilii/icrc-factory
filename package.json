@@ -3,6 +3,7 @@
 	"scripts": {
 		"format": "prettier --write . && ./scripts/format.sh",
 		"lint": "prettier --check . && ./scripts/lint.sh",
+		"deploy:prod": "dfx deploy --ic --upgrade-unchanged",
 		"deploy:staging": "dfx deploy --network staging --upgrade-unchanged",
 		"reinstall:ledger:staging": "DFX_NETWORK=staging ./scripts/build.ledger.args.sh init && dfx canister install oisy_points_ledger --mode reinstall --network staging --argument-file ./out/build.ledger.args.did --upgrade-unchanged",
 		"reinstall:index:staging": "DFX_NETWORK=staging ./scripts/build.index.args.sh init && dfx canister install oisy_points_index --mode reinstall --network staging --argument-file ./out/build.index.args.did --upgrade-unchanged"
