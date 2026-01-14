@@ -3,7 +3,7 @@
 	"scripts": {
 		"format": "prettier --write . && ./scripts/format.sh",
 		"lint": "prettier --check . && ./scripts/lint.sh",
-		"top-up": "dfx ledger top-up vcucg-liaaa-aaaam-qfb4a-cai --ic --amount 1",
+		"top-up:prod": "dfx ledger top-up icrc-factory --ic --amount 1",
 		"deploy:prod": "dfx deploy --ic",
 		"deploy:staging": "dfx deploy --network staging",
 		"wasm:ledger:prod": "dfx canister call icrc-factory --ic set_ledger_wasm_from_url \"(\\\"https://download.dfinity.systems/ic/e446c64d99a97e38166be23ff2bfade997d15ff7/canisters/ic-icrc1-ledger.wasm.gz\\\")\"",
