@@ -14,3 +14,9 @@ pub enum CreateCanisterResult {
     Ok(Principal),
     Err(CreateCanisterError),
 }
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
+pub enum SetIndexCanisterResult {
+    Ok(),
+    Err(CreateCanisterError),
+}

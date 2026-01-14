@@ -1,7 +1,10 @@
 use candid::Principal;
-use ic_cdk::api::management_canister::main::{
-    create_canister, install_code, CanisterIdRecord, CanisterInstallMode, CanisterSettings,
-    CreateCanisterArgument, InstallCodeArgument,
+use ic_cdk::api::management_canister::{
+    main::{
+        create_canister, install_code, CanisterIdRecord, CanisterInstallMode, CanisterSettings,
+        CreateCanisterArgument, InstallCodeArgument,
+    },
+    provisional::CanisterId,
 };
 
 pub async fn create_canister_with_ic_mgmt(
@@ -29,4 +32,20 @@ pub async fn install_wasm(
     install_code(args)
         .await
         .map_err(|(code, msg)| format!("Failed to install code: {:?} - {}", code, msg))
+}
+
+pub async fn upgrade_wasm(
+    canister_id: CanisterId,
+    wasm_module: Vec<u8>,
+    arg: Vec<u8>,
+) -> Result<(), String> {
+    let args = InstallCodeArgument {
+        mode: CanisterInstallMode::Upgrade(None),
+        canister_id,
+        wasm_module,
+        arg,
+    };
+    install_code(args)
+        .await
+        .map_err(|(code, msg)| format!("Failed to upgrade code: {:?} - {}", code, msg))
 }

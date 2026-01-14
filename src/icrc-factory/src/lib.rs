@@ -12,11 +12,14 @@ use ic_cdk::{
 
 use crate::{
     index::create_default_index_init_args,
-    ledger::create_default_ledger_init_args,
-    mgmt::{create_canister_with_ic_mgmt, install_wasm},
-    types::results::{
-        create_canister::{CreateCanisterError, CreateCanisterResult},
-        set_wasm::SetWasmResult,
+    ledger::{create_default_ledger_init_args, LedgerArgs},
+    mgmt::{create_canister_with_ic_mgmt, install_wasm, upgrade_wasm},
+    types::{
+        ledger_suite::ledger::upgrade_args::UpgradeArgs,
+        results::{
+            create_canister::{CreateCanisterError, CreateCanisterResult, SetIndexCanisterResult},
+            set_wasm::SetWasmResult,
+        },
     },
     wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
@@ -135,6 +138,34 @@ async fn create_icrc_index(ledger_id: CanisterId) -> CreateCanisterResult {
     }
 
     CreateCanisterResult::Ok(canister_id)
+}
+
+#[update]
+async fn set_index_canister(ledger_id: CanisterId, index_id: CanisterId) -> SetIndexCanisterResult {
+    let ledger_wasm = get_stored_ledger_wasm();
+    if ledger_wasm.is_empty() {
+        return SetIndexCanisterResult::Err(CreateCanisterError::NoWasmStored);
+    }
+
+    let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
+        index_principal: Some(index_id.into()),
+        ..Default::default()
+    }));
+
+    let arg = match Encode!(&upgrade_arg) {
+        Ok(arg) => arg,
+        Err(e) => {
+            return SetIndexCanisterResult::Err(CreateCanisterError::InitArgsEncodingFailed(
+                format!("Failed to encode upgrade args: {}", e),
+            ))
+        }
+    };
+
+    if let Err(err) = upgrade_wasm(ledger_id, ledger_wasm, arg).await {
+        return SetIndexCanisterResult::Err(CreateCanisterError::WasmInstallationFailed(err));
+    }
+
+    SetIndexCanisterResult::Ok()
 }
 
 export_candid!();
