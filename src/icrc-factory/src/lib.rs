@@ -1,5 +1,6 @@
 mod ledger;
 mod mgmt;
+mod types;
 mod wasm;
 
 use candid::{Encode, Principal};
@@ -12,7 +13,7 @@ use ic_cdk::{
 };
 
 use crate::{
-    ledger::create_default_ledger_args,
+    ledger::create_default_ledger_init_args,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
     wasm::{fetch_wasm_from_url, get_stored_wasm, set_wasm},
 };
@@ -21,8 +22,8 @@ use crate::{
 async fn create_icrc_ledger(cycles: u128) -> Result<Principal, String> {
     let caller = caller();
 
-    let final_wasm = get_stored_wasm();
-    if final_wasm.is_empty() {
+    let ledger_wasm = get_stored_wasm();
+    if ledger_wasm.is_empty() {
         return Err("No WASM stored in factory. Upload or fetch it first.".to_string());
     }
 
@@ -38,10 +39,10 @@ async fn create_icrc_ledger(cycles: u128) -> Result<Principal, String> {
 
     let canister_id = create_canister_with_ic_mgmt(Some(settings), cycles).await?;
 
-    let init_args = create_default_ledger_args(caller);
+    let init_args = create_default_ledger_init_args(caller);
     let arg = Encode!(&init_args).map_err(|e| format!("Failed to encode init args: {}", e))?;
 
-    install_wasm(canister_id, final_wasm, arg).await?;
+    install_wasm(canister_id, ledger_wasm, arg).await?;
 
     Ok(canister_id)
 }
