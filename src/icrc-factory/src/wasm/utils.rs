@@ -1,5 +1,5 @@
 use ic_cdk::api::management_canister::http_request::{
-    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs,
+    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse,
     TransformContext,
 };
 

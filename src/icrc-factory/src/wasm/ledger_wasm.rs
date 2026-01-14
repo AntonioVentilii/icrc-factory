@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 
-use crate::wasm::wasm::fetch_wasm_from_url;
+use crate::wasm::utils::fetch_wasm_from_url;
 
 thread_local! {
     static ICRC_LEDGER_WASM_STORAGE: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };

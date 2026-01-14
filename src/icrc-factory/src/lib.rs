@@ -1,3 +1,4 @@
+mod index;
 mod ledger;
 mod mgmt;
 mod types;
@@ -5,17 +6,15 @@ mod wasm;
 
 use candid::{Encode, Principal};
 use ic_cdk::{
-    api::management_canister::{
-        http_request::{HttpResponse, TransformArgs},
-        main::CanisterSettings,
-    },
-    caller, export_candid, id, query, update,
+    api::management_canister::{main::CanisterSettings, provisional::CanisterId},
+    caller, export_candid, id, update,
 };
 
 use crate::{
+    index::create_default_index_init_args,
     ledger::create_default_ledger_init_args,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
-    wasm::ledger_wasm::get_stored_ledger_wasm,
+    wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
 
 #[update]
@@ -65,6 +64,37 @@ async fn create_icrc_ledger() -> Result<Principal, String> {
     let arg = Encode!(&init_args).map_err(|e| format!("Failed to encode init args: {}", e))?;
 
     install_wasm(canister_id, ledger_wasm, arg).await?;
+
+    Ok(canister_id)
+}
+
+#[update]
+async fn create_icrc_index(ledger_id: CanisterId) -> Result<Principal, String> {
+    let cycles = 100_000_000u128;
+
+    let caller = caller();
+
+    let index_wasm = get_stored_index_wasm();
+    if index_wasm.is_empty() {
+        return Err("No WASM stored in factory. Upload or fetch it first.".to_string());
+    }
+
+    let settings = CanisterSettings {
+        controllers: Some(vec![id(), caller]),
+        compute_allocation: None,
+        memory_allocation: None,
+        freezing_threshold: None,
+        reserved_cycles_limit: None,
+        log_visibility: None,
+        wasm_memory_limit: None,
+    };
+
+    let canister_id = create_canister_with_ic_mgmt(Some(settings), cycles).await?;
+
+    let init_args = create_default_index_init_args(ledger_id);
+    let arg = Encode!(&init_args).map_err(|e| format!("Failed to encode init args: {}", e))?;
+
+    install_wasm(canister_id, index_wasm, arg).await?;
 
     Ok(canister_id)
 }
