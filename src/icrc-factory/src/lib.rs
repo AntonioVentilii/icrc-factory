@@ -105,7 +105,7 @@ async fn create_icrc_ledger() -> CreateCanisterResult {
 
 #[update]
 async fn create_icrc_index(ledger_id: CanisterId) -> CreateCanisterResult {
-    let cycles = 100_000_000u128;
+    let cycles = 1_000_000_000_000u128;
 
     let caller = caller();
 
