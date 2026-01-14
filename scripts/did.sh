@@ -7,10 +7,9 @@ function generate_did() {
 
   canister_root="src/$canister"
 
-  test -e "target/wasm32-unknown-unknown/release/$crate_name.wasm" ||
-    cargo build --manifest-path="$canister_root/Cargo.toml" \
-      --target wasm32-unknown-unknown \
-      --release --package "$canister"
+  cargo build --manifest-path="$canister_root/Cargo.toml" \
+    --target wasm32-unknown-unknown \
+    --release --package "$canister"
 
   # cargo install candid-extractor
   candid-extractor "target/wasm32-unknown-unknown/release/$crate_name.wasm" >"$canister_root/$canister.did"
