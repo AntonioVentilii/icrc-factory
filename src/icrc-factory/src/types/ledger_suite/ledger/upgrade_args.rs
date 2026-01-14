@@ -24,7 +24,7 @@ pub struct ChangeArchiveOptions {
     pub max_transactions_per_response: Option<u64>,
 }
 
-/// https://github.com/dfinity/ic/blob/6dcfafb491092704d374317d9a72a7ad2475d7c9/rs/ledger_suite/icrc1/ledger/src/lib.rs#L342
+/// https://github.com/dfinity/ic/blob/e446c64d99a97e38166be23ff2bfade997d15ff7/rs/ledger_suite/icrc1/ledger/src/lib.rs#L342
 #[derive(Clone, Eq, PartialEq, Debug, Default, CandidType, Deserialize, Serialize)]
 pub struct UpgradeArgs {
     #[serde(default, skip_serializing_if = "Option::is_none")]

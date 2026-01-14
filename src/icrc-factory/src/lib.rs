@@ -4,12 +4,11 @@ mod mgmt;
 pub mod types;
 mod wasm;
 
-use candid::Encode;
+use candid::{Encode, Principal};
 use ic_cdk::{
     api::management_canister::{
         http_request::{HttpResponse, TransformArgs},
         main::CanisterSettings,
-        provisional::CanisterId,
     },
     caller, export_candid, id, query, update,
 };
@@ -104,7 +103,7 @@ async fn create_icrc_ledger() -> CreateCanisterResult {
 }
 
 #[update]
-async fn create_icrc_index(ledger_id: CanisterId) -> CreateCanisterResult {
+async fn create_icrc_index(ledger_id: Principal) -> CreateCanisterResult {
     let cycles = 1_000_000_000_000u128;
 
     let caller = caller();
@@ -150,14 +149,14 @@ async fn create_icrc_index(ledger_id: CanisterId) -> CreateCanisterResult {
 }
 
 #[update]
-async fn set_index_canister(ledger_id: CanisterId, index_id: CanisterId) -> SetIndexCanisterResult {
+async fn set_index_canister(ledger_id: Principal, index_id: Principal) -> SetIndexCanisterResult {
     let ledger_wasm = get_stored_ledger_wasm();
     if ledger_wasm.is_empty() {
         return SetIndexCanisterResult::Err(CreateCanisterError::NoWasmStored);
     }
 
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
-        index_principal: Some(index_id.into()),
+        index_principal: Some(index_id),
         ..Default::default()
     }));
 
