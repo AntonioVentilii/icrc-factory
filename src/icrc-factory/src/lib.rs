@@ -15,7 +15,7 @@ use ic_cdk::{
 use crate::{
     ledger::create_default_ledger_init_args,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
-    wasm::{fetch_and_set_wasm_from_url, get_stored_wasm, set_wasm},
+    wasm::get_stored_wasm,
 };
 
 #[update]
@@ -48,13 +48,13 @@ async fn create_icrc_ledger(cycles: u128) -> Result<Principal, String> {
 }
 
 #[update]
-async fn upload_wasm(wasm: Vec<u8>) {
-    set_wasm(wasm);
+async fn set_wasm(wasm: Vec<u8>) {
+    crate::wasm::set_wasm(wasm);
 }
 
 #[update]
 async fn set_wasm_from_url(url: String) -> Result<usize, String> {
-    fetch_and_set_wasm_from_url(url).await
+    crate::wasm::set_wasm_from_url(url).await
 }
 
 #[query]

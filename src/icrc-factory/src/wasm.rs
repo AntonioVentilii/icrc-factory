@@ -19,7 +19,7 @@ pub fn set_wasm(wasm: Vec<u8>) {
     });
 }
 
-pub async fn fetch_and_set_wasm_from_url(url: String) -> Result<usize, String> {
+pub async fn set_wasm_from_url(url: String) -> Result<usize, String> {
     let request_headers = vec![HttpHeader {
         name: "User-Agent".to_string(),
         value: "IC-Canister".to_string(),
@@ -44,7 +44,7 @@ pub async fn fetch_and_set_wasm_from_url(url: String) -> Result<usize, String> {
         .map_err(|(code, msg)| format!("HTTP request failed: {:?} - {}", code, msg))?;
 
     if response.status != 200u64 {
-        return Err(format!("HTTP error: status {}", response.status));
+        return Err(format!("HTTP error: status {} - message {:?}", response.status, response.body));
     }
 
     set_wasm(response.body.clone());
