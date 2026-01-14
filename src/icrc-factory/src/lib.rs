@@ -4,7 +4,7 @@ mod mgmt;
 pub mod types;
 mod wasm;
 
-use candid::{Encode, Principal};
+use candid::Encode;
 use ic_cdk::{
     api::management_canister::{
         http_request::{HttpResponse, TransformArgs},
@@ -12,12 +12,14 @@ use ic_cdk::{
     },
     caller, export_candid, id, query, update,
 };
+use icrc_ledger_types::icrc1::account::Account;
 
 use crate::{
     index::create_default_index_init_args,
     ledger::{create_default_ledger_init_args, LedgerArgs},
     mgmt::{create_canister_with_ic_mgmt, install_wasm, upgrade_wasm},
     types::{
+        args::create_canister::{CreateIcrcIndexArgs, CreateIcrcLedgerArgs, SetIndexCanisterArgs},
         ledger_suite::ledger::upgrade_args::UpgradeArgs,
         results::{
             create_canister::{CreateCanisterError, CreateCanisterResult, SetIndexCanisterResult},
@@ -57,7 +59,7 @@ async fn set_index_wasm_from_url(url: String) -> SetWasmResult {
 }
 
 #[update]
-async fn create_icrc_ledger() -> CreateCanisterResult {
+async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterResult {
     let cycles = 1_000_000_000_000u128;
 
     let caller = caller();
@@ -84,7 +86,19 @@ async fn create_icrc_ledger() -> CreateCanisterResult {
         }
     };
 
-    let init_args = create_default_ledger_init_args(caller);
+    let symbol = args.symbol.unwrap_or_else(|| "TKN".to_string());
+    let name = args.name.unwrap_or_else(|| "ICRC Token".to_string());
+
+    let transfer_fee = args.transfer_fee.unwrap_or(10_000u64);
+    let decimals = args.decimals.unwrap_or(8);
+
+    let minting_account = args.minting_account.unwrap_or(Account {
+        owner: caller,
+        subaccount: None,
+    });
+
+    let init_args =
+        create_default_ledger_init_args(symbol, name, transfer_fee, decimals, minting_account);
     let arg = match Encode!(&init_args) {
         Ok(arg) => arg,
         Err(e) => {
@@ -103,7 +117,7 @@ async fn create_icrc_ledger() -> CreateCanisterResult {
 }
 
 #[update]
-async fn create_icrc_index(ledger_id: Principal) -> CreateCanisterResult {
+async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResult {
     let cycles = 1_000_000_000_000u128;
 
     let caller = caller();
@@ -130,7 +144,7 @@ async fn create_icrc_index(ledger_id: Principal) -> CreateCanisterResult {
         }
     };
 
-    let init_args = create_default_index_init_args(ledger_id);
+    let init_args = create_default_index_init_args(args.ledger_id);
     let arg = match Encode!(&init_args) {
         Ok(arg) => arg,
         Err(e) => {
@@ -149,14 +163,14 @@ async fn create_icrc_index(ledger_id: Principal) -> CreateCanisterResult {
 }
 
 #[update]
-async fn set_index_canister(ledger_id: Principal, index_id: Principal) -> SetIndexCanisterResult {
+async fn set_index_canister(args: SetIndexCanisterArgs) -> SetIndexCanisterResult {
     let ledger_wasm = get_stored_ledger_wasm();
     if ledger_wasm.is_empty() {
         return SetIndexCanisterResult::Err(CreateCanisterError::NoWasmStored);
     }
 
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
-        index_principal: Some(index_id),
+        index_principal: Some(args.index_id),
         ..Default::default()
     }));
 
@@ -169,7 +183,7 @@ async fn set_index_canister(ledger_id: Principal, index_id: Principal) -> SetInd
         }
     };
 
-    if let Err(err) = upgrade_wasm(ledger_id, ledger_wasm, arg).await {
+    if let Err(err) = upgrade_wasm(args.ledger_id, ledger_wasm, arg).await {
         return SetIndexCanisterResult::Err(CreateCanisterError::WasmInstallationFailed(err));
     }
 

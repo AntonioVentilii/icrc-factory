@@ -1,4 +1,4 @@
-use candid::{CandidType, Nat, Principal};
+use candid::{CandidType, Nat};
 use icrc_ledger_types::icrc1::account::Account;
 use serde::{Deserialize, Serialize};
 
@@ -16,18 +16,21 @@ pub enum LedgerArgs {
     Upgrade(Option<UpgradeArgs>),
 }
 
-pub fn create_default_ledger_init_args(owner: Principal) -> LedgerArgs {
+pub fn create_default_ledger_init_args(
+    symbol: String,
+    name: String,
+    transfer_fee: u64,
+    decimals: u8,
+    minting_account: Account,
+) -> LedgerArgs {
     LedgerArgs::Init(InitArgs {
-        token_symbol: "TKN".to_string(),
-        token_name: "Test Token".to_string(),
-        transfer_fee: Nat::from(10_000u64),
-        decimals: Some(8),
+        token_symbol: symbol,
+        token_name: name,
+        transfer_fee: Nat::from(transfer_fee),
+        decimals: Some(decimals),
         metadata: vec![],
         feature_flags: Some(FeatureFlags { icrc2: true }),
-        minting_account: Account {
-            owner,
-            subaccount: None,
-        },
+        minting_account,
         initial_balances: vec![],
         archive_options: ArchiveOptions {
             num_blocks_to_archive: 1_000,
