@@ -191,7 +191,7 @@ npm run format
 npm run lint
 ```
 
-[//]: # (TODO: add local deploy instructions if you have `dfx.json` configured for local.)
+[//]: # 'TODO: add local deploy instructions if you have `dfx.json` configured for local.'
 
 ---
 
@@ -301,7 +301,7 @@ dfx canister call icrc-factory --ic set_index_canister \
 
 TBD
 
-[//]: # (TODO: add details on how payments are handled, what `PaymentType` options exist, and how to top up cycles. Plus the costs of each method)
+[//]: # 'TODO: add details on how payments are handled, what `PaymentType` options exist, and how to top up cycles. Plus the costs of each method'
 
 ---
 
