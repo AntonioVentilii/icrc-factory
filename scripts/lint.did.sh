@@ -4,7 +4,7 @@ set -euo pipefail
 print_help() {
   cat <<-EOF
 
-	Checks that the backend candid file adheres to our policies.
+	Checks that the candid file adheres to our policies.
 
 	EOF
 }
@@ -17,12 +17,12 @@ print_help() {
 CANDID_FILE="$(jq -re .canisters.icrc_factory.candid dfx.json)"
 
 has_result_types() {
-  : Determining whether the backend canister contains generic Result memory_types...
+  : Determining whether the canister contains generic Result memory_types...
   git grep -w Result "$CANDID_FILE" || git grep -E 'Result_[0-9]' "$CANDID_FILE"
 }
 
 check_result_types() {
-  : Checking whether the backend canister contains generic Result memory_types...
+  : Checking whether the canister contains generic Result memory_types...
   ! has_result_types || {
     echo "ERROR: $CANDID_FILE should not contain Result or Result_[0-9]."
     echo "       Please define custom Resut types with specific names."
@@ -31,7 +31,7 @@ check_result_types() {
 }
 
 check() {
-  : Checking the backend candid file...
+  : Checking the candid file...
   check_result_types
 }
 
