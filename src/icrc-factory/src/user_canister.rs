@@ -12,7 +12,10 @@ pub fn upsert_user_canister(
 ) {
     let Candid(mut canisters) = user_canister.get(&stored_principal).unwrap_or_default();
 
-    if let Some(existing) = canisters.iter_mut().find(|c| c.kind == new_entry.kind) {
+    if let Some(existing) = canisters
+        .iter_mut()
+        .find(|c| c.canister_id == new_entry.canister_id)
+    {
         *existing = new_entry;
     } else {
         if canisters.len() == MAX_USER_CANISTER_LIST_LENGTH {
