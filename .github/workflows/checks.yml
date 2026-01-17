@@ -86,7 +86,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-  frontend-checks-pass:
+  checks-pass:
     if: always()
     needs: ['format', 'lint']
     runs-on: ubuntu-24.04
