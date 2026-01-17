@@ -54,8 +54,6 @@ At a high level it:
 3. **Installs** the stored WASM with init args
 4. Charges a **fee** for creation actions through a payment guard
 
----
-
 ## 🌐 Deployment
 
 The **ICRC Factory** canister is already **deployed on the Internet Computer** at the following canister ID:
@@ -66,13 +64,11 @@ vcucg-liaaa-aaaam-qfb4a-cai
 
 You can inspect and interact with the live canister using either of these links:
 
-* **Internet Computer Dashboard**
+- **Internet Computer Dashboard**
   [https://dashboard.internetcomputer.org/canister/vcucg-liaaa-aaaam-qfb4a-cai](https://dashboard.internetcomputer.org/canister/vcucg-liaaa-aaaam-qfb4a-cai)
 
-* **Raw Canister Interface (Candid UI)**
+- **Raw Canister Interface (Candid UI)**
   [https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai)
-
----
 
 ## 🏛️ Architecture
 
@@ -87,8 +83,6 @@ You can inspect and interact with the live canister using either of these links:
 - **Index Canister (ICRC-1 index-ng)**
   - Created by the factory
   - Points to an existing ledger (`ledger_id`)
-
----
 
 ## 🧾 Public API
 
@@ -117,8 +111,6 @@ Fetches the index WASM from a URL and stores it.
 > [!NOTE]
 > The project includes an HTTP response transform (`transform_wasm_response`) to sanitise fetched WASM responses.
 
----
-
 ### User Updates
 
 These require the caller to be **non-anonymous**.
@@ -142,8 +134,6 @@ Creates a new ICRC ledger canister.
 
 Any omitted fields fall back to the ledger’s defaults.
 
----
-
 #### `create_icrc_index(args: CreateIcrcIndexArgs, payment: Option<PaymentType>) -> CreateCanisterResult`
 
 Creates a new ICRC index canister.
@@ -152,8 +142,6 @@ Creates a new ICRC index canister.
 
 - `args.ledger_id: Principal` – required
 - `payment`: optional `PaymentType` (defaults to `AttachedCycles`)
-
----
 
 #### `set_index_canister(args: SetIndexCanisterArgs) -> SetCanisterResult`
 
@@ -164,8 +152,6 @@ Associates an index canister with a ledger by upgrading the ledger configuration
 - `args.ledger_id: Principal` – required
 - `args.index_id: Principal` – required
 
----
-
 #### `set_symbol(args: SetSymbolArgs) -> SetCanisterResult`
 
 Updates a ledger’s token symbol by upgrading the ledger configuration.
@@ -174,8 +160,6 @@ Updates a ledger’s token symbol by upgrading the ledger configuration.
 
 - `args.ledger_id: Principal` – required
 - `args.symbol: String` – required
-
----
 
 #### `set_name(args: SetNameArgs) -> SetCanisterResult`
 
@@ -186,16 +170,12 @@ Updates a ledger’s token name by upgrading the ledger configuration.
 - `args.ledger_id: Principal` – required
 - `args.name: String` – required
 
----
-
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - `dfx` installed and configured
 - Node.js + npm (for formatting / scripts)
-
----
 
 ### Local Development
 
@@ -211,8 +191,6 @@ npm run lint
 ```
 
 [//]: # 'TODO: add local deploy instructions if you have `dfx.json` configured for local.'
-
----
 
 ### Deploy to Staging / Mainnet
 
@@ -230,8 +208,6 @@ If you need to reinstall on mainnet (destructive):
 npm run reinstall:prod
 ```
 
----
-
 ## 🧪 Examples
 
 The commands below are based on your scripts. Adjust cycle amounts and arguments as needed.
@@ -248,8 +224,6 @@ npm run wasm:index:prod
 # Or both
 npm run wasm:prod
 ```
-
----
 
 ### Create a Ledger
 
@@ -275,8 +249,6 @@ dfx canister call icrc-factory --ic \
     }, null)'
 ```
 
----
-
 ### Create an Index
 
 ```bash
@@ -293,8 +265,6 @@ dfx canister call icrc-factory --ic \
   '(record { ledger_id = principal "aaaaa-aa"; }, null)'
 ```
 
----
-
 ### Set Token Name / Symbol
 
 ```bash
@@ -305,8 +275,6 @@ dfx canister call icrc-factory --ic set_name \
   '(record { ledger_id = principal "aaaaa-aa"; name = "My Token"; })'
 ```
 
----
-
 ### Attach an Index to a Ledger
 
 ```bash
@@ -314,15 +282,11 @@ dfx canister call icrc-factory --ic set_index_canister \
   '(record { ledger_id = principal "aaaaa-aa"; index_id = principal "bbbbb-bb"; })'
 ```
 
----
-
 ## 💳 Payment Handling
 
 TBD
 
 [//]: # 'TODO: add details on how payments are handled, what `PaymentType` options exist, and how to top up cycles. Plus the costs of each method'
-
----
 
 ## 🙏 Credits and References
 
