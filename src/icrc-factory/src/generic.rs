@@ -1,5 +1,5 @@
 use candid::Encode;
-use ic_cdk::{api::management_canister::main::CanisterSettings, caller, id, update};
+use ic_cdk::{api::management_canister::main::CanisterSettings, caller, id};
 use icrc_ledger_types::icrc1::account::Account;
 
 use crate::{
