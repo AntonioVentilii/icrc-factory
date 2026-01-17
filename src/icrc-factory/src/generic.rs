@@ -62,8 +62,7 @@ pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterRes
         Ok(arg) => arg,
         Err(e) => {
             return CreateCanisterResult::Err(CreateCanisterError::InitArgsEncodingFailed(format!(
-                "Failed to encode init args: {}",
-                e
+                "Failed to encode init args: {e}",
             )))
         }
     };
@@ -107,8 +106,7 @@ pub async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResul
         Ok(arg) => arg,
         Err(e) => {
             return CreateCanisterResult::Err(CreateCanisterError::InitArgsEncodingFailed(format!(
-                "Failed to encode init args: {}",
-                e
+                "Failed to encode init args: {e}"
             )))
         }
     };

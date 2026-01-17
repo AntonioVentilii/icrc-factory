@@ -15,7 +15,7 @@ pub async fn create_canister_with_ic_mgmt(
     create_canister(args, cycles)
         .await
         .map(|(CanisterIdRecord { canister_id },)| canister_id)
-        .map_err(|(code, msg)| format!("Failed to create canister: {:?} - {}", code, msg))
+        .map_err(|(code, msg)| format!("Failed to create canister: {code:?} - {msg}"))
 }
 
 pub async fn install_wasm(
@@ -31,7 +31,7 @@ pub async fn install_wasm(
     };
     install_code(args)
         .await
-        .map_err(|(code, msg)| format!("Failed to install code: {:?} - {}", code, msg))
+        .map_err(|(code, msg)| format!("Failed to install code: {code:?} - {msg}"))
 }
 
 pub async fn upgrade_wasm(
@@ -47,5 +47,5 @@ pub async fn upgrade_wasm(
     };
     install_code(args)
         .await
-        .map_err(|(code, msg)| format!("Failed to upgrade code: {:?} - {}", code, msg))
+        .map_err(|(code, msg)| format!("Failed to upgrade code: {code:?} - {msg}"))
 }

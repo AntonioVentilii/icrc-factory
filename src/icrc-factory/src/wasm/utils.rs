@@ -25,7 +25,7 @@ pub async fn fetch_wasm_from_url(url: String) -> Result<HttpResponse, String> {
     // For simplicity, we assume the canister has enough cycles.
     let (response,) = http_request(request, 50_000_000_000) // 50B cycles placeholder
         .await
-        .map_err(|(code, msg)| format!("HTTP request failed: {:?} - {}", code, msg))?;
+        .map_err(|(code, msg)| format!("HTTP request failed: {code:?} - {msg}"))?;
 
     if response.status != 200u64 {
         return Err(format!(

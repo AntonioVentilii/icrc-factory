@@ -6,7 +6,7 @@ use serde::Serialize;
 
 use crate::types::ledger_suite::common::FeatureFlags;
 
-/// https://github.com/dfinity/ic/blob/e446c64d99a97e38166be23ff2bfade997d15ff7/rs/ledger_suite/common/ledger_canister_core/src/archive.rs#L23
+/// <https://github.com/dfinity/ic/blob/e446c64d99a97e38166be23ff2bfade997d15ff7/rs/ledger_suite/common/ledger_canister_core/src/archive.rs#L23>
 #[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
 pub struct ArchiveOptions {
     /// The number of blocks which, when exceeded, will trigger an archiving
@@ -28,7 +28,7 @@ pub struct ArchiveOptions {
     pub max_transactions_per_response: Option<u64>,
 }
 
-/// https://github.com/dfinity/ic/blob/e446c64d99a97e38166be23ff2bfade997d15ff7/rs/ledger_suite/icrc1/ledger/src/lib.rs#L270
+/// <https://github.com/dfinity/ic/blob/e446c64d99a97e38166be23ff2bfade997d15ff7/rs/ledger_suite/icrc1/ledger/src/lib.rs#L270>
 #[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
 pub struct InitArgs {
     pub minting_account: Account,

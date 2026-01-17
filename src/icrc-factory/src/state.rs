@@ -1,4 +1,4 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, sync::LazyLock};
 
 use candid::Principal;
 use ic_papi_guard::guards::any::{PaymentGuard, VendorPaymentConfig};
@@ -6,7 +6,6 @@ use ic_stable_structures::{
     memory_manager::{MemoryId, MemoryManager},
     DefaultMemoryImpl,
 };
-use lazy_static::lazy_static;
 
 use crate::types::{
     candid::Candid,
@@ -67,21 +66,19 @@ pub fn set_config(arg: InitArgs) {
     });
 }
 
-lazy_static! {
-    pub static ref PAYMENT_GUARD: PaymentGuard<5> = PaymentGuard {
-        supported: [
-            VendorPaymentConfig::AttachedCycles,
-            VendorPaymentConfig::CallerPaysIcrc2Cycles,
-            VendorPaymentConfig::PatronPaysIcrc2Cycles,
-            VendorPaymentConfig::CallerPaysIcrc2Tokens {
-                ledger: payment_ledger(),
-            },
-            VendorPaymentConfig::PatronPaysIcrc2Tokens {
-                ledger: payment_ledger(),
-            },
-        ],
-    };
-}
+pub static PAYMENT_GUARD: LazyLock<PaymentGuard<5>> = LazyLock::new(|| PaymentGuard {
+    supported: [
+        VendorPaymentConfig::AttachedCycles,
+        VendorPaymentConfig::CallerPaysIcrc2Cycles,
+        VendorPaymentConfig::PatronPaysIcrc2Cycles,
+        VendorPaymentConfig::CallerPaysIcrc2Tokens {
+            ledger: payment_ledger(),
+        },
+        VendorPaymentConfig::PatronPaysIcrc2Tokens {
+            ledger: payment_ledger(),
+        },
+    ],
+});
 
 /// Provides the canister id of the ledger used for payments.
 pub fn payment_ledger() -> Principal {

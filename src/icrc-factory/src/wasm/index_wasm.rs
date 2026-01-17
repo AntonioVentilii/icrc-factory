@@ -4,13 +4,13 @@ use crate::{
 };
 
 pub fn get_stored_index_wasm() -> Vec<u8> {
-    read_state(|s| s.icrc_index_wasm.get().to_vec())
+    read_state(|s| s.icrc_index_wasm.get().clone())
 }
 
 pub fn set_index_wasm(wasm: Vec<u8>) {
     mutate_state(|s| {
         s.icrc_index_wasm.set(wasm);
-    })
+    });
 }
 
 pub async fn set_index_wasm_from_url(url: String) -> Result<usize, String> {

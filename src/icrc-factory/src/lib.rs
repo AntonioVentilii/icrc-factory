@@ -117,7 +117,7 @@ fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
 /// # Arguments
 /// - `wasm`: Raw WASM bytecode to store.
 #[update(guard = "caller_is_controller")]
-async fn set_ledger_wasm(wasm: Vec<u8>) {
+fn set_ledger_wasm(wasm: Vec<u8>) {
     crate::wasm::ledger_wasm::set_ledger_wasm(wasm);
 }
 
@@ -146,7 +146,7 @@ async fn set_ledger_wasm_from_url(url: String) -> SetWasmResult {
 /// # Arguments
 /// - `wasm`: Raw WASM bytecode to store.
 #[update(guard = "caller_is_controller")]
-async fn set_index_wasm(wasm: Vec<u8>) {
+fn set_index_wasm(wasm: Vec<u8>) {
     crate::wasm::index_wasm::set_index_wasm(wasm);
 }
 

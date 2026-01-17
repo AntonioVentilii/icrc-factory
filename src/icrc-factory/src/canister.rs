@@ -17,8 +17,7 @@ pub async fn upgrade_ledger_canister(args: UpgradeLedgerCanisterArgs) -> SetCani
         Ok(arg) => arg,
         Err(e) => {
             return SetCanisterResult::Err(CreateCanisterError::InitArgsEncodingFailed(format!(
-                "Failed to encode upgrade args: {}",
-                e
+                "Failed to encode upgrade args: {e}",
             )))
         }
     };
