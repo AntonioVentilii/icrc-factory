@@ -1,10 +1,11 @@
 use candid::Encode;
-use ic_cdk::{api::management_canister::main::CanisterSettings, caller, id, update};
+use ic_cdk::{api::management_canister::main::CanisterSettings, caller, id};
 use icrc_ledger_types::icrc1::account::Account;
 
 use crate::{
     index::create_default_index_init_args,
     ledger::create_default_ledger_init_args,
+    methods::SignerMethods,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
     types::{
         args::create_canister::{CreateIcrcIndexArgs, CreateIcrcLedgerArgs},
@@ -13,8 +14,12 @@ use crate::{
     wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
 
+/// To create a canister, at least 500 billion cycles are needed to cover the base fee and
+/// installation cost.
+pub const MIN_CYCLES_FOR_CANISTER_CREATION: u64 = 500_000_000_000;
+
 pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterResult {
-    let cycles = 1_000_000_000_000u128;
+    let cycles = SignerMethods::CreateIcrcLedger.fee();
 
     let caller = caller();
 
@@ -33,7 +38,7 @@ pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterRes
         wasm_memory_limit: None,
     };
 
-    let canister_id = match create_canister_with_ic_mgmt(Some(settings), cycles).await {
+    let canister_id = match create_canister_with_ic_mgmt(Some(settings), cycles.into()).await {
         Ok(id) => id,
         Err(err) => {
             return CreateCanisterResult::Err(CreateCanisterError::CanisterCreationFailed(err))
@@ -71,7 +76,7 @@ pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterRes
 }
 
 pub async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResult {
-    let cycles = 1_000_000_000_000u128;
+    let cycles = SignerMethods::CreateIcrcIndex.fee();
 
     let caller = caller();
 
@@ -90,7 +95,7 @@ pub async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResul
         wasm_memory_limit: None,
     };
 
-    let canister_id = match create_canister_with_ic_mgmt(Some(settings), cycles).await {
+    let canister_id = match create_canister_with_ic_mgmt(Some(settings), cycles.into()).await {
         Ok(id) => id,
         Err(err) => {
             return CreateCanisterResult::Err(CreateCanisterError::CanisterCreationFailed(err))
