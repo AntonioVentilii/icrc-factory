@@ -28,6 +28,7 @@ use crate::{
             CreateIcrcIndexArgs, CreateIcrcLedgerArgs, SetIndexCanisterArgs, SetNameArgs,
             SetSymbolArgs, UpgradeLedgerCanisterArgs,
         },
+        candid::Candid,
         config::{Args, Config},
         ledger_suite::ledger::upgrade_args::UpgradeArgs,
         results::{
@@ -324,9 +325,39 @@ async fn set_name(args: SetNameArgs) -> SetCanisterResult {
 }
 
 #[query(guard = "caller_is_not_anonymous")]
-pub fn list_user_canisters() -> Vec<UserCanister> {
+fn list_user_canisters() -> Vec<UserCanister> {
     let stored_principal = StoredPrincipal(ic_cdk::caller());
     read_state(|s| s.user_canister.get(&stored_principal).unwrap_or_default().0)
+}
+
+#[query]
+fn list_all_canisters_paginated(offset: Option<u64>, limit: Option<u64>) -> Vec<UserCanister> {
+    let offset = offset.unwrap_or(0);
+    let limit = limit.unwrap_or(50);
+
+    read_state(|s| {
+        let mut out = Vec::new();
+        let mut skipped = 0u64;
+
+        for candid_vec in s.user_canister.values() {
+            let Candid(canisters) = candid_vec;
+
+            for canister in canisters {
+                if skipped < offset {
+                    skipped += 1;
+                    continue;
+                }
+
+                if out.len() as u64 == limit {
+                    return out;
+                }
+
+                out.push(canister);
+            }
+        }
+
+        out
+    })
 }
 
 export_candid!();

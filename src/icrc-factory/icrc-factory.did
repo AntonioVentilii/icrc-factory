@@ -153,6 +153,9 @@ service : (Args) -> {
 	create_icrc_ledger : (CreateIcrcLedgerArgs, opt PaymentType) -> (
 		CreateCanisterResult
 	);
+	list_all_canisters_paginated : (opt nat64, opt nat64) -> (
+		vec UserCanister
+	) query;
 	list_user_canisters : () -> (vec UserCanister) query;
 	// Associates an index canister with a ledger by upgrading the ledger configuration.
 	//
