@@ -35,3 +35,7 @@ runs:
     - name: Install zizmor
       shell: bash
       run: scripts/setup zizmor
+
+    - name: Install yq
+      shell: bash
+      run: scripts/setup yq
