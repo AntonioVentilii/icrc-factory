@@ -31,3 +31,7 @@ runs:
     - name: Install cargo dependency sorter
       shell: bash
       run: cargo binstall --no-confirm cargo-sort@1.0.9
+
+    - name: Install zizmor
+      shell: bash
+      run: scripts/setup zizmor
