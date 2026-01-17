@@ -17,6 +17,7 @@
 		"did": "./scripts/did.sh && npm run format"
 	},
 	"devDependencies": {
+		"@icp-sdk/bindgen": "^0.2.1",
 		"prettier": "^3.7.4",
 		"prettier-plugin-motoko": "^0.12.1",
 		"prettier-plugin-organize-imports": "^4.3.0"
