@@ -3,113 +3,113 @@ type Args = variant { Upgrade; Init : InitArgs };
 type CallerPaysIcrc2Tokens = record { ledger : principal };
 type Config = record { cycles_ledger : principal };
 type CreateCanisterError = variant {
-  CanisterCreationFailed : text;
-  NoWasmStored;
-  WasmInstallationFailed : text;
-  PaymentError : PaymentError;
-  InitArgsEncodingFailed : text;
+	CanisterCreationFailed : text;
+	NoWasmStored;
+	WasmInstallationFailed : text;
+	PaymentError : PaymentError;
+	InitArgsEncodingFailed : text
 };
 type CreateCanisterResult = variant {
-  Ok : principal;
-  Err : CreateCanisterError;
+	Ok : principal;
+	Err : CreateCanisterError
 };
 type CreateIcrcIndexArgs = record { ledger_id : principal };
 type CreateIcrcLedgerArgs = record {
-  decimals : opt nat8;
-  transfer_fee : opt nat64;
-  minting_account : opt Account;
-  name : opt text;
-  symbol : opt text;
+	decimals : opt nat8;
+	transfer_fee : opt nat64;
+	minting_account : opt Account;
+	name : opt text;
+	symbol : opt text
 };
 type HttpHeader = record { value : text; name : text };
 type HttpResponse = record {
-  status : nat;
-  body : blob;
-  headers : vec HttpHeader;
+	status : nat;
+	body : blob;
+	headers : vec HttpHeader
 };
 type InitArgs = record { cycles_ledger : opt principal };
 type PatronPaysIcrc2Tokens = record { ledger : principal; patron : Account };
 type PaymentError = variant {
-  LedgerWithdrawFromError : record {
-    error : WithdrawFromError;
-    ledger : principal;
-  };
-  LedgerUnreachable : CallerPaysIcrc2Tokens;
-  InvalidPatron;
-  LedgerTransferFromError : record {
-    error : TransferFromError;
-    ledger : principal;
-  };
-  UnsupportedPaymentType;
-  InsufficientFunds : record { needed : nat64; available : nat64 };
+	LedgerWithdrawFromError : record {
+		error : WithdrawFromError;
+		ledger : principal
+	};
+	LedgerUnreachable : CallerPaysIcrc2Tokens;
+	InvalidPatron;
+	LedgerTransferFromError : record {
+		error : TransferFromError;
+		ledger : principal
+	};
+	UnsupportedPaymentType;
+	InsufficientFunds : record { needed : nat64; available : nat64 }
 };
 type PaymentType = variant {
-  PatronPaysIcrc2Tokens : PatronPaysIcrc2Tokens;
-  AttachedCycles;
-  CallerPaysIcrc2Cycles;
-  CallerPaysIcrc2Tokens : CallerPaysIcrc2Tokens;
-  PatronPaysIcrc2Cycles : Account;
+	PatronPaysIcrc2Tokens : PatronPaysIcrc2Tokens;
+	AttachedCycles;
+	CallerPaysIcrc2Cycles;
+	CallerPaysIcrc2Tokens : CallerPaysIcrc2Tokens;
+	PatronPaysIcrc2Cycles : Account
 };
 type RejectionCode = variant {
-  NoError;
-  CanisterError;
-  SysTransient;
-  DestinationInvalid;
-  Unknown;
-  SysFatal;
-  CanisterReject;
+	NoError;
+	CanisterError;
+	SysTransient;
+	DestinationInvalid;
+	Unknown;
+	SysFatal;
+	CanisterReject
 };
 type SetCanisterResult = variant { Ok : record {}; Err : CreateCanisterError };
 type SetIndexCanisterArgs = record {
-  ledger_id : principal;
-  index_id : principal;
+	ledger_id : principal;
+	index_id : principal
 };
 type SetNameArgs = record { name : text; ledger_id : principal };
 type SetSymbolArgs = record { ledger_id : principal; symbol : text };
 type SetWasmResult = variant { Ok : nat64; Err : text };
 type TransferFromError = variant {
-  GenericError : record { message : text; error_code : nat };
-  TemporarilyUnavailable;
-  InsufficientAllowance : record { allowance : nat };
-  BadBurn : record { min_burn_amount : nat };
-  Duplicate : record { duplicate_of : nat };
-  BadFee : record { expected_fee : nat };
-  CreatedInFuture : record { ledger_time : nat64 };
-  TooOld;
-  InsufficientFunds : record { balance : nat };
+	GenericError : record { message : text; error_code : nat };
+	TemporarilyUnavailable;
+	InsufficientAllowance : record { allowance : nat };
+	BadBurn : record { min_burn_amount : nat };
+	Duplicate : record { duplicate_of : nat };
+	BadFee : record { expected_fee : nat };
+	CreatedInFuture : record { ledger_time : nat64 };
+	TooOld;
+	InsufficientFunds : record { balance : nat }
 };
 type TransformArgs = record { context : blob; response : HttpResponse };
 type WithdrawFromError = variant {
-  GenericError : record { message : text; error_code : nat };
-  TemporarilyUnavailable;
-  InsufficientAllowance : record { allowance : nat };
-  Duplicate : record { duplicate_of : nat };
-  InvalidReceiver : record { receiver : principal };
-  CreatedInFuture : record { ledger_time : nat64 };
-  TooOld;
-  FailedToWithdrawFrom : record {
-    withdraw_from_block : opt nat;
-    rejection_code : RejectionCode;
-    refund_block : opt nat;
-    approval_refund_block : opt nat;
-    rejection_reason : text;
-  };
-  InsufficientFunds : record { balance : nat };
+	GenericError : record { message : text; error_code : nat };
+	TemporarilyUnavailable;
+	InsufficientAllowance : record { allowance : nat };
+	Duplicate : record { duplicate_of : nat };
+	InvalidReceiver : record { receiver : principal };
+	CreatedInFuture : record { ledger_time : nat64 };
+	TooOld;
+	FailedToWithdrawFrom : record {
+		withdraw_from_block : opt nat;
+		rejection_code : RejectionCode;
+		refund_block : opt nat;
+		approval_refund_block : opt nat;
+		rejection_reason : text
+	};
+	InsufficientFunds : record { balance : nat }
 };
 service : (Args) -> {
-  config : () -> (Config) query;
-  create_icrc_index : (CreateIcrcIndexArgs, opt PaymentType) -> (
-      CreateCanisterResult,
-    );
-  create_icrc_ledger : (CreateIcrcLedgerArgs, opt PaymentType) -> (
-      CreateCanisterResult,
-    );
-  set_index_canister : (SetIndexCanisterArgs) -> (SetCanisterResult);
-  set_index_wasm : (blob) -> ();
-  set_index_wasm_from_url : (text) -> (SetWasmResult);
-  set_ledger_wasm : (blob) -> ();
-  set_ledger_wasm_from_url : (text) -> (SetWasmResult);
-  set_name : (SetNameArgs) -> (SetCanisterResult);
-  set_symbol : (SetSymbolArgs) -> (SetCanisterResult);
-  transform_wasm_response : (TransformArgs) -> (HttpResponse) query;
+	config : () -> (Config) query;
+	create_icrc_index : (CreateIcrcIndexArgs, opt PaymentType) -> (
+		CreateCanisterResult
+	);
+	create_icrc_ledger : (CreateIcrcLedgerArgs, opt PaymentType) -> (
+		CreateCanisterResult
+	);
+	set_index_canister : (SetIndexCanisterArgs) -> (SetCanisterResult);
+	set_index_wasm : (blob) -> ();
+	set_index_wasm_from_url : (text) -> (SetWasmResult);
+	set_ledger_wasm : (blob) -> ();
+	set_ledger_wasm_from_url : (text) -> (SetWasmResult);
+	set_name : (SetNameArgs) -> (SetCanisterResult);
+	set_symbol : (SetSymbolArgs) -> (SetCanisterResult);
+	transform_wasm_response : (TransformArgs) -> (HttpResponse) query
 }
