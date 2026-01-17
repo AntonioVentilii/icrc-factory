@@ -41,6 +41,7 @@ and lets callers **create and manage ICRC ledger suite canisters** (ledger + ind
 
 ---
 
+<a id="overview"></a>
 ## 🧭 Overview
 
 **ICRC Factory** is a canister that acts as an “ICRC ledger suite factory”.
@@ -54,6 +55,7 @@ At a high level it:
 3. **Installs** the stored WASM with init args
 4. Charges a **fee** for creation actions through a payment guard
 
+<a id="deployment"></a>
 ## 🌐 Deployment
 
 The **ICRC Factory** canister is already **deployed on the Internet Computer** at the following canister ID:
@@ -70,6 +72,7 @@ You can inspect and interact with the live canister using either of these links:
 - **Raw Canister Interface (Candid UI)**
   [https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai)
 
+<a id="architecture"></a>
 ## 🏛️ Architecture
 
 - **Factory Canister (`icrc-factory`)**
@@ -84,6 +87,7 @@ You can inspect and interact with the live canister using either of these links:
   - Created by the factory
   - Points to an existing ledger (`ledger_id`)
 
+<a id="public-api"></a>
 ## 🧾 Public API
 
 ### Queries
@@ -170,6 +174,7 @@ Updates a ledger’s token name by upgrading the ledger configuration.
 - `args.ledger_id: Principal` – required
 - `args.name: String` – required
 
+<a id="getting-started"></a>
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -208,6 +213,7 @@ If you need to reinstall on mainnet (destructive):
 npm run reinstall:prod
 ```
 
+<a id="examples"></a>
 ## 🧪 Examples
 
 The commands below are based on your scripts. Adjust cycle amounts and arguments as needed.
@@ -282,12 +288,14 @@ dfx canister call icrc-factory --ic set_index_canister \
   '(record { ledger_id = principal "aaaaa-aa"; index_id = principal "bbbbb-bb"; })'
 ```
 
+<a id="payment-handling"></a>
 ## 💳 Payment Handling
 
 TBD
 
 [//]: # 'TODO: add details on how payments are handled, what `PaymentType` options exist, and how to top up cycles. Plus the costs of each method'
 
+<a id="credits-and-references"></a>
 ## 🙏 Credits and References
 
 The code was inspired by a series of sources and projects, including:
