@@ -1,7 +1,7 @@
 {
 	"name": "icrc-factory",
 	"scripts": {
-		"build": "cargo build --target wasm32-unknown-unknown --release -p icrc-factory --locked",
+		"build": "./scripts/build.factory.sh",
 		"test": "./scripts/test-rust.sh",
 		"format": "prettier --write . && ./scripts/format.sh",
 		"lint": "prettier --check . && ./scripts/lint.sh",
