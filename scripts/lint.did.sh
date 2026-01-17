@@ -14,17 +14,17 @@ print_help() {
   exit 0
 }
 
-BACKEND_CANDID_FILE="$(jq -re .canisters.icrc-factory.candid dfx.json)"
+CANDID_FILE="$(jq -re .canisters.icrc-factory.candid dfx.json)"
 
 has_result_types() {
   : Determining whether the backend canister contains generic Result memory_types...
-  git grep -w Result "$BACKEND_CANDID_FILE" || git grep -E 'Result_[0-9]' "$BACKEND_CANDID_FILE"
+  git grep -w Result "$CANDID_FILE" || git grep -E 'Result_[0-9]' "$CANDID_FILE"
 }
 
 check_result_types() {
   : Checking whether the backend canister contains generic Result memory_types...
   ! has_result_types || {
-    echo "ERROR: $BACKEND_CANDID_FILE should not contain Result or Result_[0-9]."
+    echo "ERROR: $CANDID_FILE should not contain Result or Result_[0-9]."
     echo "       Please define custom Resut types with specific names."
     exit 1
   }
