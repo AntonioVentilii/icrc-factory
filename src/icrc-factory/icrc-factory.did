@@ -97,19 +97,145 @@ type WithdrawFromError = variant {
 	InsufficientFunds : record { balance : nat }
 };
 service : (Args) -> {
+	// Returns the current canister configuration.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Returns
+	// - A clone of the stored `Config`.
 	config : () -> (Config) query;
+	// Creates a new ICRC index canister for an existing ledger.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Arguments
+	// - `args`: [`CreateIcrcIndexArgs`]
+	// - `ledger_id`: **required** principal of the ledger to index.
+	// - `payment`: Optional [`PaymentType`]
+	// - If `None`, defaults to `PaymentType::AttachedCycles`.
+	//
+	// # Returns
+	// - `CreateCanisterResult::Ok(Principal)` containing the newly created index canister ID.
+	// - `CreateCanisterResult::Err(CreateCanisterError)` if payment deduction fails or if canister
+	// creation / init-args encoding / WASM installation fails.
 	create_icrc_index : (CreateIcrcIndexArgs, opt PaymentType) -> (
 		CreateCanisterResult
 	);
+	// Creates a new ICRC ledger canister.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Arguments
+	// - `args`: [`CreateIcrcLedgerArgs`]
+	// - All fields inside `args` are optional:
+	// - `symbol`: optional token symbol
+	// - `name`: optional token name
+	// - `transfer_fee`: optional fee (smallest unit)
+	// - `decimals`: optional decimals
+	// - `minting_account`: optional minting account
+	// - Any omitted fields fall back to the ledger’s defaults.
+	// - `payment`: Optional [`PaymentType`]
+	// - If `None`, defaults to `PaymentType::AttachedCycles`.
+	//
+	// # Returns
+	// - `CreateCanisterResult::Ok(Principal)` containing the newly created ledger canister ID.
+	// - `CreateCanisterResult::Err(CreateCanisterError)` if payment deduction fails or if canister
+	// creation / init-args encoding / WASM installation fails.
 	create_icrc_ledger : (CreateIcrcLedgerArgs, opt PaymentType) -> (
 		CreateCanisterResult
 	);
+	// Associates an index canister with a ledger by upgrading the ledger configuration.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Arguments
+	// - `args`: [`SetIndexCanisterArgs`]
+	// - `ledger_id`: **required** principal of the ledger to update.
+	// - `index_id`: **required** principal of the index canister to associate.
+	//
+	// # Returns
+	// - `SetCanisterResult::Ok(())` on success.
+	// - `SetCanisterResult::Err(CreateCanisterError)` if the ledger upgrade fails.
 	set_index_canister : (SetIndexCanisterArgs) -> (SetCanisterResult);
+	// Stores a new ICRC index WASM binary.
+	//
+	// # Access Control
+	// - Caller must be a controller.
+	//
+	// # Arguments
+	// - `wasm`: Raw WASM bytecode to store.
 	set_index_wasm : (blob) -> ();
+	// Fetches and stores an ICRC index WASM binary from a URL.
+	//
+	// # Access Control
+	// - Caller must be a controller.
+	//
+	// # Arguments
+	// - `url`: URL pointing to the WASM binary.
+	//
+	// # Returns
+	// - `SetWasmResult` indicating success or failure.
 	set_index_wasm_from_url : (text) -> (SetWasmResult);
+	// Stores a new ICRC ledger WASM binary.
+	//
+	// # Access Control
+	// - Caller must be a controller.
+	//
+	// # Arguments
+	// - `wasm`: Raw WASM bytecode to store.
 	set_ledger_wasm : (blob) -> ();
+	// Fetches and stores an ICRC ledger WASM binary from a URL.
+	//
+	// # Access Control
+	// - Caller must be a controller.
+	//
+	// # Arguments
+	// - `url`: URL pointing to the WASM binary.
+	//
+	// # Returns
+	// - `SetWasmResult` indicating success or failure.
 	set_ledger_wasm_from_url : (text) -> (SetWasmResult);
+	// Updates a ledger’s token name by upgrading the ledger configuration.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Arguments
+	// - `args`: [`SetNameArgs`]
+	// - `ledger_id`: **required** principal of the ledger to update.
+	// - `name`: **required** new token name.
+	//
+	// # Returns
+	// - `SetCanisterResult::Ok(())` on success.
+	// - `SetCanisterResult::Err(CreateCanisterError)` if the ledger upgrade fails.
 	set_name : (SetNameArgs) -> (SetCanisterResult);
+	// Updates a ledger’s token symbol by upgrading the ledger configuration.
+	//
+	// # Access Control
+	// - Caller must not be anonymous.
+	//
+	// # Arguments
+	// - `args`: [`SetSymbolArgs`]
+	// - `ledger_id`: **required** principal of the ledger to update.
+	// - `symbol`: **required** new token symbol.
+	//
+	// # Returns
+	// - `SetCanisterResult::Ok(())` on success.
+	// - `SetCanisterResult::Err(CreateCanisterError)` if the ledger upgrade fails.
 	set_symbol : (SetSymbolArgs) -> (SetCanisterResult);
+	// Transforms HTTP responses when fetching WASM binaries.
+	//
+	// # Purpose
+	// - Used as an HTTP transform function to sanitise responses from external WASM sources.
+	//
+	// # Arguments
+	// - `args`: HTTP transform arguments provided by the IC.
+	//
+	// # Returns
+	// - A transformed `HttpResponse`.
 	transform_wasm_response : (TransformArgs) -> (HttpResponse) query
 }
