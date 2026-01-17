@@ -21,11 +21,11 @@ jobs:
       - name: Prepare
         uses: ./.github/actions/prepare
 
-      - name: Run tests
-        run: npm run test
-
       - name: Build
         run: npm run build
+
+      - name: Run tests
+        run: npm run test
 
   tests-pass:
     needs: ['rust']
