@@ -16,7 +16,7 @@ pub enum CreateCanisterResult {
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
-pub enum SetIndexCanisterResult {
+pub enum SetCanisterResult {
     Ok(),
     Err(CreateCanisterError),
 }

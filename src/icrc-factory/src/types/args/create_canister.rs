@@ -2,6 +2,8 @@ use candid::{CandidType, Deserialize, Principal};
 use icrc_ledger_types::icrc1::account::Account;
 use serde::Serialize;
 
+use crate::ledger::LedgerArgs;
+
 #[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
 pub struct CreateIcrcLedgerArgs {
     pub symbol: Option<String>,
@@ -17,7 +19,25 @@ pub struct CreateIcrcIndexArgs {
 }
 
 #[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
+pub struct UpgradeLedgerCanisterArgs {
+    pub ledger_id: Principal,
+    pub args: LedgerArgs,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
 pub struct SetIndexCanisterArgs {
     pub ledger_id: Principal,
     pub index_id: Principal,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
+pub struct SetSymbolArgs {
+    pub ledger_id: Principal,
+    pub symbol: String,
+}
+
+#[derive(CandidType, Serialize, Deserialize, Clone, Eq, PartialEq, Debug)]
+pub struct SetNameArgs {
+    pub ledger_id: Principal,
+    pub name: String,
 }

@@ -10,7 +10,7 @@ use crate::types::ledger_suite::{
     },
 };
 
-#[derive(CandidType, Serialize, Deserialize, Clone, Debug)]
+#[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
 pub enum LedgerArgs {
     Init(InitArgs),
     Upgrade(Option<UpgradeArgs>),

@@ -1,3 +1,4 @@
+mod canister;
 mod index;
 mod ledger;
 mod mgmt;
@@ -15,14 +16,18 @@ use ic_cdk::{
 use icrc_ledger_types::icrc1::account::Account;
 
 use crate::{
+    canister::upgrade_ledger_canister,
     index::create_default_index_init_args,
     ledger::{create_default_ledger_init_args, LedgerArgs},
     mgmt::{create_canister_with_ic_mgmt, install_wasm, upgrade_wasm},
     types::{
-        args::create_canister::{CreateIcrcIndexArgs, CreateIcrcLedgerArgs, SetIndexCanisterArgs},
+        args::create_canister::{
+            CreateIcrcIndexArgs, CreateIcrcLedgerArgs, SetIndexCanisterArgs, SetNameArgs,
+            SetSymbolArgs, UpgradeLedgerCanisterArgs,
+        },
         ledger_suite::ledger::upgrade_args::UpgradeArgs,
         results::{
-            create_canister::{CreateCanisterError, CreateCanisterResult, SetIndexCanisterResult},
+            create_canister::{CreateCanisterError, CreateCanisterResult, SetCanisterResult},
             set_wasm::SetWasmResult,
         },
     },
@@ -163,31 +168,45 @@ async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResult {
 }
 
 #[update]
-async fn set_index_canister(args: SetIndexCanisterArgs) -> SetIndexCanisterResult {
-    let ledger_wasm = get_stored_ledger_wasm();
-    if ledger_wasm.is_empty() {
-        return SetIndexCanisterResult::Err(CreateCanisterError::NoWasmStored);
-    }
-
+async fn set_index_canister(args: SetIndexCanisterArgs) -> SetCanisterResult {
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
         index_principal: Some(args.index_id),
         ..Default::default()
     }));
 
-    let arg = match Encode!(&upgrade_arg) {
-        Ok(arg) => arg,
-        Err(e) => {
-            return SetIndexCanisterResult::Err(CreateCanisterError::InitArgsEncodingFailed(
-                format!("Failed to encode upgrade args: {}", e),
-            ))
-        }
-    };
+    upgrade_ledger_canister(UpgradeLedgerCanisterArgs {
+        ledger_id: args.ledger_id,
+        args: upgrade_arg,
+    })
+    .await
+}
 
-    if let Err(err) = upgrade_wasm(args.ledger_id, ledger_wasm, arg).await {
-        return SetIndexCanisterResult::Err(CreateCanisterError::WasmInstallationFailed(err));
-    }
+#[update]
+async fn set_symbol(args: SetSymbolArgs) -> SetCanisterResult {
+    let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
+        token_symbol: Some(args.symbol),
+        ..Default::default()
+    }));
 
-    SetIndexCanisterResult::Ok()
+    upgrade_ledger_canister(UpgradeLedgerCanisterArgs {
+        ledger_id: args.ledger_id,
+        args: upgrade_arg,
+    })
+    .await
+}
+
+#[update]
+async fn set_name(args: SetNameArgs) -> SetCanisterResult {
+    let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
+        token_name: Some(args.name),
+        ..Default::default()
+    }));
+
+    upgrade_ledger_canister(UpgradeLedgerCanisterArgs {
+        ledger_id: args.ledger_id,
+        args: upgrade_arg,
+    })
+    .await
 }
 
 export_candid!();

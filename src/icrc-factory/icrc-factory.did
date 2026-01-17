@@ -23,23 +23,24 @@ type HttpResponse = record {
 	body : blob;
 	headers : vec HttpHeader
 };
+type SetCanisterResult = variant { Ok : record {}; Err : CreateCanisterError };
 type SetIndexCanisterArgs = record {
 	ledger_id : principal;
 	index_id : principal
 };
-type SetIndexCanisterResult = variant {
-	Ok : record {};
-	Err : CreateCanisterError
-};
+type SetNameArgs = record { name : text; ledger_id : principal };
+type SetSymbolArgs = record { ledger_id : principal; symbol : text };
 type SetWasmResult = variant { Ok : nat64; Err : text };
 type TransformArgs = record { context : blob; response : HttpResponse };
 service : {
 	create_icrc_index : (CreateIcrcIndexArgs) -> (CreateCanisterResult);
 	create_icrc_ledger : (CreateIcrcLedgerArgs) -> (CreateCanisterResult);
-	set_index_canister : (SetIndexCanisterArgs) -> (SetIndexCanisterResult);
+	set_index_canister : (SetIndexCanisterArgs) -> (SetCanisterResult);
 	set_index_wasm : (blob) -> ();
 	set_index_wasm_from_url : (text) -> (SetWasmResult);
 	set_ledger_wasm : (blob) -> ();
 	set_ledger_wasm_from_url : (text) -> (SetWasmResult);
+	set_name : (SetNameArgs) -> (SetCanisterResult);
+	set_symbol : (SetSymbolArgs) -> (SetCanisterResult);
 	transform_wasm_response : (TransformArgs) -> (HttpResponse) query
 }
