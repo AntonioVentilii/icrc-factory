@@ -11,11 +11,6 @@ and lets callers **create and manage ICRC ledger suite canisters** (ledger + ind
 
 </div>
 
-> **What this gives you**
->
-> - Create **new** ledger canisters and index canisters
-> - Update existing ledger configuration (set name, symbol, index canister)
-
 ---
 
 ## 📚 Table of Contents
