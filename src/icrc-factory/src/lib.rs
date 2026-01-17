@@ -34,6 +34,8 @@ use crate::{
             create_canister::{CreateCanisterError, CreateCanisterResult, SetCanisterResult},
             set_wasm::SetWasmResult,
         },
+        stored_principal::StoredPrincipal,
+        user_canister::UserCanister,
     },
     wasm::ledger_wasm::get_stored_ledger_wasm,
 };
@@ -319,6 +321,12 @@ async fn set_name(args: SetNameArgs) -> SetCanisterResult {
         args: upgrade_arg,
     })
     .await
+}
+
+#[query(guard = "caller_is_not_anonymous")]
+pub fn list_user_canisters() -> Vec<UserCanister> {
+    let stored_principal = StoredPrincipal(ic_cdk::caller());
+    read_state(|s| s.user_canister.get(&stored_principal).unwrap_or_default().0)
 }
 
 export_candid!();

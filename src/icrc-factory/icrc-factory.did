@@ -79,6 +79,12 @@ type TransferFromError = variant {
 	InsufficientFunds : record { balance : nat }
 };
 type TransformArgs = record { context : blob; response : HttpResponse };
+type UserCanister = record {
+	kind : UserCanisterKind;
+	installed : bool;
+	canister_id : principal
+};
+type UserCanisterKind = variant { IcrcIndex; IcrcLedger };
 type WithdrawFromError = variant {
 	GenericError : record { message : text; error_code : nat };
 	TemporarilyUnavailable;
@@ -147,6 +153,7 @@ service : (Args) -> {
 	create_icrc_ledger : (CreateIcrcLedgerArgs, opt PaymentType) -> (
 		CreateCanisterResult
 	);
+	list_user_canisters : () -> (vec UserCanister) query;
 	// Associates an index canister with a ledger by upgrading the ledger configuration.
 	//
 	// # Access Control
