@@ -89,27 +89,21 @@ You can inspect and interact with the live canister using either of these links:
 
 ## 🧾 Public API
 
-### Queries
-
 ### Controller-only Updates
 
 These are restricted to **canister controllers**.
 
-#### `set_ledger_wasm(wasm: Vec<u8>)`
+- **`set_ledger_wasm(wasm: Vec<u8>)`**  
+  Stores a new ledger WASM.
 
-Stores a new ledger WASM.
+- **`set_ledger_wasm_from_url(url: String) -> SetWasmResult`**  
+  Fetches the ledger WASM from a URL and stores it.
 
-#### `set_ledger_wasm_from_url(url: String) -> SetWasmResult`
+- **`set_index_wasm(wasm: Vec<u8>)`**  
+  Stores a new index WASM.
 
-Fetches the ledger WASM from a URL and stores it.
-
-#### `set_index_wasm(wasm: Vec<u8>)`
-
-Stores a new index WASM.
-
-#### `set_index_wasm_from_url(url: String) -> SetWasmResult`
-
-Fetches the index WASM from a URL and stores it.
+- **`set_index_wasm_from_url(url: String) -> SetWasmResult`**  
+  Fetches the index WASM from a URL and stores it.
 
 > [!NOTE]
 > The project includes an HTTP response transform (`transform_wasm_response`) to sanitise fetched WASM responses.
@@ -118,60 +112,107 @@ Fetches the index WASM from a URL and stores it.
 
 These require the caller to be **non-anonymous**.
 
-#### `create_icrc_ledger(args: CreateIcrcLedgerArgs, payment: Option<PaymentType>) -> CreateCanisterResult`
+---
 
-Creates a new ICRC ledger canister.
+#### `create_icrc_ledger`
 
-**What the caller must provide**
+```text
+(args: CreateIcrcLedgerArgs, payment: Option<PaymentType>) -> CreateCanisterResult
+```
 
-- `args`: a `CreateIcrcLedgerArgs` struct (all fields optional)
-- `payment`: optional `PaymentType` (defaults to `AttachedCycles` if `None`)
+Creates and installs a new **ICRC-1 ledger canister** using the stored ledger WASM.
 
-**`CreateIcrcLedgerArgs` fields**
+**Parameters**
 
-- `symbol: Option<String>` – optional token symbol
-- `name: Option<String>` – optional token name
-- `transfer_fee: Option<u64>` – optional transfer fee (smallest unit)
-- `decimals: Option<u8>` – optional decimals
-- `minting_account: Option<Account>` – optional minting account
+- **`args`** — `CreateIcrcLedgerArgs` (all fields optional)
+  Ledger initialisation configuration. Any omitted field falls back to the ledger’s default.
 
-Any omitted fields fall back to the ledger’s defaults.
+  | Field             | Type              | Description                  |
+  | ----------------- | ----------------- | ---------------------------- |
+  | `symbol`          | `Option<String>`  | Token symbol                 |
+  | `name`            | `Option<String>`  | Token name                   |
+  | `transfer_fee`    | `Option<u64>`     | Transfer fee (smallest unit) |
+  | `decimals`        | `Option<u8>`      | Token decimals               |
+  | `minting_account` | `Option<Account>` | Minting account              |
 
-#### `create_icrc_index(args: CreateIcrcIndexArgs, payment: Option<PaymentType>) -> CreateCanisterResult`
+- **`payment`** — `Option<PaymentType>`
+  Payment method used for canister creation. Defaults to `AttachedCycles` when `None`.
 
-Creates a new ICRC index canister.
+---
 
-**What the caller must provide**
+#### `create_icrc_index`
 
-- `args.ledger_id: Principal` – required
-- `payment`: optional `PaymentType` (defaults to `AttachedCycles`)
+```text
+(args: CreateIcrcIndexArgs, payment: Option<PaymentType>) -> CreateCanisterResult
+```
 
-#### `set_index_canister(args: SetIndexCanisterArgs) -> SetCanisterResult`
+Creates and installs a new **ICRC-1 index canister** linked to an existing ledger.
 
-Associates an index canister with a ledger by upgrading the ledger configuration.
+**Parameters**
 
-**What the caller must provide**
+- **`args`** — `CreateIcrcIndexArgs`
 
-- `args.ledger_id: Principal` – required
-- `args.index_id: Principal` – required
+  | Field       | Type        | Required | Description              |
+  | ----------- | ----------- | -------- | ------------------------ |
+  | `ledger_id` | `Principal` | yes      | Ledger canister to index |
 
-#### `set_symbol(args: SetSymbolArgs) -> SetCanisterResult`
+- **`payment`** — `Option<PaymentType>`
+  Payment method used for canister creation. Defaults to `AttachedCycles` when `None`.
 
-Updates a ledger’s token symbol by upgrading the ledger configuration.
+---
 
-**What the caller must provide**
+#### `set_index_canister`
 
-- `args.ledger_id: Principal` – required
-- `args.symbol: String` – required
+```text
+(args: SetIndexCanisterArgs) -> SetCanisterResult
+```
 
-#### `set_name(args: SetNameArgs) -> SetCanisterResult`
+Associates an index canister with an existing ledger by upgrading the ledger configuration.
 
-Updates a ledger’s token name by upgrading the ledger configuration.
+**Parameters**
 
-**What the caller must provide**
+| Field       | Type        | Required | Description        |
+| ----------- | ----------- | -------- | ------------------ |
+| `ledger_id` | `Principal` | yes      | Ledger canister ID |
+| `index_id`  | `Principal` | yes      | Index canister ID  |
 
-- `args.ledger_id: Principal` – required
-- `args.name: String` – required
+---
+
+#### `set_symbol`
+
+```text
+(args: SetSymbolArgs) -> SetCanisterResult
+```
+
+Updates a ledger’s token symbol via a configuration upgrade.
+
+**Parameters**
+
+| Field       | Type        | Required | Description        |
+| ----------- | ----------- | -------- | ------------------ |
+| `ledger_id` | `Principal` | yes      | Ledger canister ID |
+| `symbol`    | `String`    | yes      | New token symbol   |
+
+---
+
+#### `set_name`
+
+```text
+(args: SetNameArgs) -> SetCanisterResult
+```
+
+Updates a ledger’s token name via a configuration upgrade.
+
+**Parameters**
+
+| Field       | Type        | Required | Description        |
+| ----------- | ----------- | -------- | ------------------ |
+| `ledger_id` | `Principal` | yes      | Ledger canister ID |
+| `name`      | `String`    | yes      | New token name     |
+
+### Queries
+
+> _No query methods are currently exposed._
 
 <a id="getting-started"></a>
 
