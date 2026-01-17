@@ -2,6 +2,7 @@ mod canister;
 mod index;
 mod ledger;
 mod mgmt;
+mod state;
 pub mod types;
 mod wasm;
 

@@ -1,24 +1,21 @@
-use std::cell::RefCell;
-
-use crate::wasm::utils::fetch_wasm_from_url;
-
-thread_local! {
-    static ICRC_INDEX_WASM_STORAGE: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };
-}
+use crate::{
+    state::{mutate_state, read_state},
+    wasm::utils::fetch_wasm_from_url,
+};
 
 pub fn get_stored_index_wasm() -> Vec<u8> {
-    ICRC_INDEX_WASM_STORAGE.with(|storage| storage.borrow().clone())
+    read_state(|s| s.icrc_index_wasm.get().to_vec())
 }
 
 pub fn set_index_wasm(wasm: Vec<u8>) {
-    ICRC_INDEX_WASM_STORAGE.with(|storage| {
-        *storage.borrow_mut() = wasm;
-    });
+    mutate_state(|s| {
+        s.icrc_index_wasm.set(wasm);
+    })
 }
 
 pub async fn set_index_wasm_from_url(url: String) -> Result<usize, String> {
     let response = fetch_wasm_from_url(url).await?;
-
-    set_index_wasm(response.body.clone());
-    Ok(response.body.len())
+    let len = response.body.len();
+    set_index_wasm(response.body);
+    Ok(len)
 }
