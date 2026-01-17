@@ -39,23 +39,3 @@ runs:
     - name: Install yq
       shell: bash
       run: scripts/setup yq
-
-    - name: Check if relevant files changed
-      uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
-      id: changes
-      with:
-        filters: |
-          backend:
-             - '.github/workflows/check.yml'
-             - '**/*.rs'
-             - '**/Cargo.*'
-             - 'rust-toolchain.toml'
-
-    - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
-      if: steps.changes.outputs.backend == 'true'
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml') }}
