@@ -3,10 +3,10 @@ set -euxo pipefail
 cd "$(dirname "$(realpath "$0")")/.."
 
 set -x
-time xargs -P8 -I{} bash -c "{}" <<EOF
-./scripts/lint.cargo-workspace-dependencies.sh
-./scripts/lint.did.sh
-./scripts/lint.github.sh
-./scripts/lint.rust.sh
-./scripts/lint.sh.sh
-EOF
+time (
+  ./scripts/lint.cargo-workspace-dependencies.sh
+  ./scripts/lint.did.sh
+  ./scripts/lint.github.sh
+  ./scripts/lint.rust.sh
+  ./scripts/lint.sh.sh
+)
