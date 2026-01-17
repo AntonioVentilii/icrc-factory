@@ -3,7 +3,7 @@ mod generic;
 mod guards;
 mod index;
 mod ledger;
-mod methods;
+pub mod methods;
 mod mgmt;
 mod state;
 pub mod types;

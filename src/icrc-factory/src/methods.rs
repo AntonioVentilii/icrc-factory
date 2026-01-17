@@ -1,3 +1,5 @@
+use crate::generic::MIN_CYCLES_FOR_CANISTER_CREATION;
+
 pub enum SignerMethods {
     CreateIcrcLedger,
     CreateIcrcIndex,
@@ -10,8 +12,8 @@ impl SignerMethods {
     pub fn fee(&self) -> u64 {
         // Note: Fees are determined with the aid of scripts/check-pricing
         match self {
-            SignerMethods::CreateIcrcLedger => 1_100_000_000_000,
-            SignerMethods::CreateIcrcIndex => 1_100_000_000_000,
+            SignerMethods::CreateIcrcLedger => MIN_CYCLES_FOR_CANISTER_CREATION + 400_000_000_000,
+            SignerMethods::CreateIcrcIndex => MIN_CYCLES_FOR_CANISTER_CREATION + 400_000_000_000,
         }
     }
 }
