@@ -1,19 +1,18 @@
 use candid::{CandidType, Deserialize, Principal};
-use serde::Serialize;
 
-#[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
+#[derive(CandidType, Deserialize)]
 pub struct InitArgs {
-    /// Payment canister ID.
+    /// Payment canister ID. If not provided, the default cycles ledger canister ID will be used.
     pub cycles_ledger: Option<Principal>,
 }
 
-#[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
+#[derive(CandidType, Deserialize)]
 pub enum Args {
     Init(InitArgs),
     Upgrade,
 }
 
-#[derive(Clone, Eq, PartialEq, Debug, CandidType, Deserialize, Serialize)]
+#[derive(CandidType, Deserialize, Clone, Debug, Eq, PartialEq)]
 pub struct Config {
     /// Payment canister ID.
     pub cycles_ledger: Principal,

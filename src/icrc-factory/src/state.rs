@@ -60,13 +60,10 @@ pub fn read_config<R>(f: impl FnOnce(&Config) -> R) -> R {
     })
 }
 
-pub fn set_config(args: InitArgs) {
-    let config = Config::from(args);
+pub fn set_config(arg: InitArgs) {
+    let config = Config::from(arg);
     mutate_state(|state| {
-        state
-            .config
-            .set(Some(Candid(config)))
-            .expect("setting config should succeed");
+        state.config.set(Some(Candid(config)));
     });
 }
 

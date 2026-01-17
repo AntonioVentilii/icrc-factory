@@ -1,0 +1,7 @@
+(
+	variant {
+		Init = record {
+			cycles_ledger = null
+		}
+	}
+)
