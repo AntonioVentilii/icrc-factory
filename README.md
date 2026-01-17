@@ -21,6 +21,7 @@ and lets callers **create and manage ICRC ledger suite canisters** (ledger + ind
 ## 📚 Table of Contents
 
 - [🧭 Overview](#overview)
+- [🌐 Deployment](#deployment)
 - [🏛️ Architecture](#architecture)
 - [🧾 Public API](#public-api)
   - [Controller-only Updates](#controller-only-updates)
@@ -52,6 +53,24 @@ At a high level it:
 2. **Creates new canisters** via the management canister
 3. **Installs** the stored WASM with init args
 4. Charges a **fee** for creation actions through a payment guard
+
+---
+
+## 🌐 Deployment
+
+The **ICRC Factory** canister is already **deployed on the Internet Computer** at the following canister ID:
+
+```
+vcucg-liaaa-aaaam-qfb4a-cai
+```
+
+You can inspect and interact with the live canister using either of these links:
+
+* **Internet Computer Dashboard**
+  [https://dashboard.internetcomputer.org/canister/vcucg-liaaa-aaaam-qfb4a-cai](https://dashboard.internetcomputer.org/canister/vcucg-liaaa-aaaam-qfb4a-cai)
+
+* **Raw Canister Interface (Candid UI)**
+  [https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=vcucg-liaaa-aaaam-qfb4a-cai)
 
 ---
 
