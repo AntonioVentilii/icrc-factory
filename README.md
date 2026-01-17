@@ -4,7 +4,6 @@ A canister that **stores ICRC ledger/index WASMs**
 and lets callers **create and manage ICRC ledger suite canisters** (ledger + index) on the Internet Computer.
 
 <div align="center" style="display:flex;flex-direction:column;">
-<br/>
 
 [![Internet Computer portal](https://img.shields.io/badge/Internet-Computer-grey?logo=internet%20computer)](https://internetcomputer.org)
 [![GitHub CI Library Checks Workflow Status](https://img.shields.io/github/actions/workflow/status/AntonioVentilii/icrc-factory/checks.yml?logo=github&label=Checks)](https://github.com/AntonioVentilii/icrc-factory/actions/workflows/checks.yml)
