@@ -1,6 +1,8 @@
 {
 	"name": "icrc-factory",
 	"scripts": {
+		"build": "cargo build --verbose",
+		"test": "cargo test --verbose",
 		"format": "prettier --write . && ./scripts/format.sh",
 		"lint": "prettier --check . && ./scripts/lint.sh",
 		"top-up:prod": "dfx ledger top-up icrc-factory --ic --amount 1",

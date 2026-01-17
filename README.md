@@ -6,8 +6,8 @@ and lets callers **create and manage ICRC ledger suite canisters** (ledger + ind
 <div align="center" style="display:flex;flex-direction:column;">
 
 [![Internet Computer portal](https://img.shields.io/badge/Internet-Computer-grey?logo=internet%20computer)](https://internetcomputer.org)
-[![GitHub CI Library Checks Workflow Status](https://img.shields.io/github/actions/workflow/status/AntonioVentilii/icrc-factory/checks.yml?logo=github&label=Checks)](https://github.com/AntonioVentilii/icrc-factory/actions/workflows/checks.yml)
-[![GitHub CI Library Tests Workflow Status](https://img.shields.io/github/actions/workflow/status/AntonioVentilii/icrc-factory/tests.yml?logo=github&label=Tests)](https://github.com/AntonioVentilii/icrc-factory/actions/workflows/tests.yml)
+[![GitHub CI Checks Workflow Status](https://img.shields.io/github/actions/workflow/status/AntonioVentilii/icrc-factory/checks.yml?logo=github&label=Checks)](https://github.com/AntonioVentilii/icrc-factory/actions/workflows/checks.yml)
+[![GitHub CI Tests Workflow Status](https://img.shields.io/github/actions/workflow/status/AntonioVentilii/icrc-factory/tests.yml?logo=github&label=Tests)](https://github.com/AntonioVentilii/icrc-factory/actions/workflows/tests.yml)
 
 </div>
 
