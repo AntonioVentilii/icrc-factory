@@ -1,5 +1,6 @@
 mod canister;
 mod generic;
+mod guards;
 mod index;
 mod ledger;
 mod methods;
@@ -16,6 +17,7 @@ use ic_papi_api::PaymentType;
 
 use crate::{
     canister::upgrade_ledger_canister,
+    guards::{caller_is_controller, caller_is_not_anonymous},
     ledger::LedgerArgs,
     methods::SignerMethods,
     mgmt::upgrade_wasm,
@@ -63,7 +65,7 @@ pub fn post_upgrade(arg: Option<Args>) {
     }
 }
 
-#[query]
+#[query(guard = "caller_is_not_anonymous")]
 pub fn config() -> Config {
     read_config(std::clone::Clone::clone)
 }
@@ -73,31 +75,31 @@ fn transform_wasm_response(args: TransformArgs) -> HttpResponse {
     crate::wasm::utils::transform_wasm_response(args)
 }
 
-#[update]
+#[update(guard = "caller_is_controller")]
 async fn set_ledger_wasm(wasm: Vec<u8>) {
     crate::wasm::ledger_wasm::set_ledger_wasm(wasm);
 }
 
-#[update]
+#[update(guard = "caller_is_controller")]
 async fn set_ledger_wasm_from_url(url: String) -> SetWasmResult {
     crate::wasm::ledger_wasm::set_ledger_wasm_from_url(url)
         .await
         .into()
 }
 
-#[update]
+#[update(guard = "caller_is_controller")]
 async fn set_index_wasm(wasm: Vec<u8>) {
     crate::wasm::index_wasm::set_index_wasm(wasm);
 }
 
-#[update]
+#[update(guard = "caller_is_controller")]
 async fn set_index_wasm_from_url(url: String) -> SetWasmResult {
     crate::wasm::index_wasm::set_index_wasm_from_url(url)
         .await
         .into()
 }
 
-#[update]
+#[update(guard = "caller_is_not_anonymous")]
 async fn create_icrc_ledger(
     args: CreateIcrcLedgerArgs,
     payment: Option<PaymentType>,
@@ -115,7 +117,7 @@ async fn create_icrc_ledger(
     generic::create_icrc_ledger(args).await
 }
 
-#[update]
+#[update(guard = "caller_is_not_anonymous")]
 async fn create_icrc_index(
     args: CreateIcrcIndexArgs,
     payment: Option<PaymentType>,
@@ -133,7 +135,7 @@ async fn create_icrc_index(
     generic::create_icrc_index(args).await
 }
 
-#[update]
+#[update(guard = "caller_is_not_anonymous")]
 async fn set_index_canister(args: SetIndexCanisterArgs) -> SetCanisterResult {
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
         index_principal: Some(args.index_id),
@@ -147,7 +149,7 @@ async fn set_index_canister(args: SetIndexCanisterArgs) -> SetCanisterResult {
     .await
 }
 
-#[update]
+#[update(guard = "caller_is_not_anonymous")]
 async fn set_symbol(args: SetSymbolArgs) -> SetCanisterResult {
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
         token_symbol: Some(args.symbol),
@@ -161,7 +163,7 @@ async fn set_symbol(args: SetSymbolArgs) -> SetCanisterResult {
     .await
 }
 
-#[update]
+#[update(guard = "caller_is_not_anonymous")]
 async fn set_name(args: SetNameArgs) -> SetCanisterResult {
     let upgrade_arg = LedgerArgs::Upgrade(Some(UpgradeArgs {
         token_name: Some(args.name),
