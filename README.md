@@ -1,7 +1,6 @@
 # 🏭 ICRC Factory (`icrc-factory`)
 
-A canister that **stores ICRC ledger/index WASMs**
-and lets callers **create and manage ICRC ledger suite canisters** (ledger + index) on the Internet Computer.
+A canister that lets callers **create and manage ICRC ledger suite canisters** (ledger + index) on the Internet Computer.
 
 <div align="center" style="display:flex;flex-direction:column;">
 
