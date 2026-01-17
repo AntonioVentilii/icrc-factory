@@ -10,12 +10,13 @@ use ic_stable_structures::{
 use crate::types::{
     candid::Candid,
     config::{Config, InitArgs},
-    memory::{ConfigCell, IcrcLedgerWasmCell},
+    memory::{ConfigCell, IcrcLedgerWasmCell, UserCanisterMap},
 };
 
 const CONFIG_MEMORY_ID: MemoryId = MemoryId::new(0);
 const ICRC_LEDGER_WASM_MEMORY_ID: MemoryId = MemoryId::new(2);
 const ICRC_INDEX_WASM_MEMORY_ID: MemoryId = MemoryId::new(3);
+const USER_CANISTER_MEMORY_ID: MemoryId = MemoryId::new(4);
 
 thread_local! {
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
@@ -27,6 +28,7 @@ thread_local! {
              config: ConfigCell::init(mm.borrow().get(CONFIG_MEMORY_ID), None),
             icrc_ledger_wasm: IcrcLedgerWasmCell::init(mm.borrow().get(ICRC_LEDGER_WASM_MEMORY_ID), Vec::new()),
             icrc_index_wasm: IcrcLedgerWasmCell::init(mm.borrow().get(ICRC_INDEX_WASM_MEMORY_ID),Vec::new()),
+            user_canister: UserCanisterMap::init(mm.borrow().get(USER_CANISTER_MEMORY_ID)),
         })
     );
 }
@@ -35,6 +37,7 @@ pub struct State {
     pub config: ConfigCell,
     pub icrc_ledger_wasm: IcrcLedgerWasmCell,
     pub icrc_index_wasm: IcrcLedgerWasmCell,
+    pub user_canister: UserCanisterMap,
 }
 
 pub fn read_state<R>(f: impl FnOnce(&State) -> R) -> R {

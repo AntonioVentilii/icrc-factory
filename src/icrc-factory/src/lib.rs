@@ -7,6 +7,7 @@ pub mod methods;
 mod mgmt;
 mod state;
 pub mod types;
+mod user_canister;
 mod wasm;
 
 use ic_cdk::{

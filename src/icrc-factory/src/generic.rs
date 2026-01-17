@@ -7,10 +7,14 @@ use crate::{
     ledger::create_default_ledger_init_args,
     methods::SignerMethods,
     mgmt::{create_canister_with_ic_mgmt, install_wasm},
+    state::mutate_state,
     types::{
         args::create_canister::{CreateIcrcIndexArgs, CreateIcrcLedgerArgs},
         results::create_canister::{CreateCanisterError, CreateCanisterResult},
+        stored_principal::StoredPrincipal,
+        user_canister::{UserCanister, UserCanisterKind},
     },
+    user_canister::upsert_user_canister,
     wasm::{index_wasm::get_stored_index_wasm, ledger_wasm::get_stored_ledger_wasm},
 };
 
@@ -45,6 +49,18 @@ pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterRes
         }
     };
 
+    mutate_state(|state| {
+        upsert_user_canister(
+            StoredPrincipal(caller),
+            &mut state.user_canister,
+            UserCanister {
+                canister_id,
+                kind: UserCanisterKind::IcrcLedger,
+                installed: false,
+            },
+        );
+    });
+
     let symbol = args.symbol.unwrap_or_else(|| "TKN".to_string());
     let name = args.name.unwrap_or_else(|| "ICRC Token".to_string());
 
@@ -70,6 +86,18 @@ pub async fn create_icrc_ledger(args: CreateIcrcLedgerArgs) -> CreateCanisterRes
     if let Err(err) = install_wasm(canister_id, ledger_wasm, arg).await {
         return CreateCanisterResult::Err(CreateCanisterError::WasmInstallationFailed(err));
     }
+
+    mutate_state(|state| {
+        upsert_user_canister(
+            StoredPrincipal(caller),
+            &mut state.user_canister,
+            UserCanister {
+                canister_id,
+                kind: UserCanisterKind::IcrcLedger,
+                installed: true,
+            },
+        );
+    });
 
     CreateCanisterResult::Ok(canister_id)
 }
@@ -101,6 +129,18 @@ pub async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResul
         }
     };
 
+    mutate_state(|state| {
+        upsert_user_canister(
+            StoredPrincipal(caller),
+            &mut state.user_canister,
+            UserCanister {
+                canister_id,
+                kind: UserCanisterKind::IcrcIndex,
+                installed: false,
+            },
+        );
+    });
+
     let init_args = create_default_index_init_args(args.ledger_id);
     let arg = match Encode!(&init_args) {
         Ok(arg) => arg,
@@ -114,6 +154,18 @@ pub async fn create_icrc_index(args: CreateIcrcIndexArgs) -> CreateCanisterResul
     if let Err(err) = install_wasm(canister_id, index_wasm, arg).await {
         return CreateCanisterResult::Err(CreateCanisterError::WasmInstallationFailed(err));
     }
+
+    mutate_state(|state| {
+        upsert_user_canister(
+            StoredPrincipal(caller),
+            &mut state.user_canister,
+            UserCanister {
+                canister_id,
+                kind: UserCanisterKind::IcrcIndex,
+                installed: true,
+            },
+        );
+    });
 
     CreateCanisterResult::Ok(canister_id)
 }
