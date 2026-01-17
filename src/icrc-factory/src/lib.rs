@@ -10,7 +10,7 @@ mod wasm;
 
 use ic_cdk::{
     api::management_canister::http_request::{HttpResponse, TransformArgs},
-    caller, export_candid, id, init, post_upgrade, query, update,
+    export_candid, init, post_upgrade, query, update,
 };
 use ic_papi_api::PaymentType;
 
@@ -19,13 +19,13 @@ use crate::{
     ledger::LedgerArgs,
     methods::SignerMethods,
     mgmt::upgrade_wasm,
-    state::{read_state, set_config, PAYMENT_GUARD},
+    state::{read_config, read_state, set_config, PAYMENT_GUARD},
     types::{
         args::create_canister::{
             CreateIcrcIndexArgs, CreateIcrcLedgerArgs, SetIndexCanisterArgs, SetNameArgs,
             SetSymbolArgs, UpgradeLedgerCanisterArgs,
         },
-        config::Args,
+        config::{Args, Config},
         ledger_suite::ledger::upgrade_args::UpgradeArgs,
         results::{
             create_canister::{CreateCanisterError, CreateCanisterResult, SetCanisterResult},
@@ -61,6 +61,11 @@ pub fn post_upgrade(arg: Option<Args>) {
             });
         }
     }
+}
+
+#[query]
+pub fn config() -> Config {
+    read_config(std::clone::Clone::clone)
 }
 
 #[query]

@@ -1,5 +1,4 @@
 use candid::{CandidType, Deserialize, Principal};
-use serde::Serialize;
 
 #[derive(CandidType, Deserialize, Clone, Eq, PartialEq, Debug)]
 pub enum CreateCanisterError {

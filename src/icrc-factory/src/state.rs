@@ -71,17 +71,17 @@ pub fn set_config(args: InitArgs) {
 }
 
 lazy_static! {
-    pub static ref PAYMENT_GUARD: PaymentGuard<3> = PaymentGuard {
+    pub static ref PAYMENT_GUARD: PaymentGuard<5> = PaymentGuard {
         supported: [
             VendorPaymentConfig::AttachedCycles,
             VendorPaymentConfig::CallerPaysIcrc2Cycles,
             VendorPaymentConfig::PatronPaysIcrc2Cycles,
-            // VendorPaymentConfig::CallerPaysIcrc2Tokens {
-            //     ledger: payment_ledger(),
-            // },
-            // VendorPaymentConfig::PatronPaysIcrc2Tokens {
-            //     ledger: payment_ledger(),
-            // },
+            VendorPaymentConfig::CallerPaysIcrc2Tokens {
+                ledger: payment_ledger(),
+            },
+            VendorPaymentConfig::PatronPaysIcrc2Tokens {
+                ledger: payment_ledger(),
+            },
         ],
     };
 }
