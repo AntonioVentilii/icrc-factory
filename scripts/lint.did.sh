@@ -14,20 +14,12 @@ print_help() {
   exit 0
 }
 
-BACKEND_CANDID_FILE="$(jq -re .canisters.backend.candid dfx.json)"
+BACKEND_CANDID_FILE="$(jq -re .canisters.icrc-factory.candid dfx.json)"
 
 has_result_types() {
-  # Return 0 if Result types are found, 1 if not found.
-  # Never hard-fail on git grep errors (e.g. file not tracked / missing).
-  if git grep -w -- "$BACKEND_CANDID_FILE" -e 'Result' >/dev/null 2>&1; then
-    return 0
-  fi
-  if git grep -E -- "$BACKEND_CANDID_FILE" -e 'Result_[0-9]' >/dev/null 2>&1; then
-    return 0
-  fi
-  return 1
+  : Determining whether the backend canister contains generic Result memory_types...
+  git grep -w Result "$BACKEND_CANDID_FILE" || git grep -E 'Result_[0-9]' "$BACKEND_CANDID_FILE"
 }
-
 
 check_result_types() {
   : Checking whether the backend canister contains generic Result memory_types...
