@@ -14,7 +14,7 @@ print_help() {
   exit 0
 }
 
-CANDID_FILE="$(jq -re .canisters.icrc_factory.candid dfx.json)"
+CANDID_FILE="$(jq -re '.canisters["icrc-factory"].candid' dfx.json)"
 
 has_result_types() {
   : Determining whether the canister contains generic Result memory_types...
