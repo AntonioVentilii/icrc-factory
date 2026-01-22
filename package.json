@@ -1,5 +1,6 @@
 {
 	"name": "icrc-factory",
+	"version": "0.0.1",
 	"scripts": {
 		"build": "./scripts/build.factory.sh",
 		"test": "./scripts/test-rust.sh",
